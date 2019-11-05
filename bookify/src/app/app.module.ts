@@ -6,12 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AdminSidebarComponent } from './admin/admin-sidebar/admin-sidebar.component';
 import { AdminGenresComponent } from './admin/admin-genres/admin-genres.component';
+import { AdminMainComponent } from './admin/admin-main/admin-main.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AdminSidebarComponent,
-    AdminGenresComponent
+    AdminGenresComponent,
+    AdminMainComponent
   ],
   imports: [
     BrowserModule,
