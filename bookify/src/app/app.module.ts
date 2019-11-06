@@ -17,6 +17,7 @@ import {
   MatAutocompleteModule, MatListModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatDatepickerModule, MatNativeDateModule,
   MatTableModule, MatCardModule, MatRadioModule, MatIconModule
 } from '@angular/material';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import {
     MatTableModule,
     MatCardModule,
     MatRadioModule,
-    MatIconModule
+    MatIconModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
