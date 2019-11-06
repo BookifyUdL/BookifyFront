@@ -1,3 +1,185 @@
 /* You can add global styles to this file, and also import other style files */
+@import "../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css";
 
 
+div.well{
+  height: 250px;
+}
+
+.Absolute-Center {
+  margin: auto;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.Absolute-Center.is-Responsive {
+  width: 50%;
+  height: 50%;
+  min-width: 200px;
+  max-width: 400px;
+  padding: 40px;
+}
+
+#logo-container{
+  margin: auto auto 10px;
+  width:200px;
+  height:30px;
+}
+
+.nav-item {
+  color: #fff;
+  background-color: #f8f9fa;
+  border-color: #fff;
+  border-radius: 20px;
+}
+.nav-item:hover {
+  color: #fff;
+  background-color: #DCDCDC;
+  border-color: #C0C0C0;
+}
+
+.container-full {
+  margin: 0 auto;
+  width: 100%;
+}
+
+.container-95 {
+  margin-left: 10px;
+  width: 95%;
+}
+
+.container-80 {
+  margin-left: 10px;
+  width: 80%;
+}
+
+.container-20 {
+  margin-left: 10px;
+  width: 20%;
+}
+
+.container-30 {
+  margin-left: 10px;
+  width: 30%;
+}
+
+.container-45 {
+  margin-left: 10px;
+  width: 45%;
+}
+
+.divider{
+  width:5px;
+  height:auto;
+  display:inline-block;
+}
+
+.full-heigh {
+  height: 100%;
+}
+
+
+h1 {
+  font-weight: 800;
+  letter-spacing: -1px;
+  color: inherit;
+  font-size: 40px;
+}
+
+h2 {
+  font-size: 30px;
+  color: inherit;
+}
+
+body {
+  padding-top: 60px;
+}
+
+/* NAVIGATION */
+nav {
+  margin: 0 auto;
+  background: #fff;
+  box-shadow: 0px 5px 0px #dedede;
+  text-align: center;
+}
+nav ul {
+  list-style: none;
+}
+
+nav ul li {
+  display: inline-block;
+}
+
+nav ul li a {
+  display: block;
+  text-decoration: none;
+  color: #aaa;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+nav ul li a,
+nav ul li a:after,
+nav ul li a:before {
+  transition: all .5s;
+}
+
+nav ul li a:hover {
+  color: #555;
+}
+
+
+/* stroke */
+nav.stroke ul li a,
+nav.fill ul li a {
+  position: relative;
+}
+nav.stroke ul li a:after,
+nav.fill ul li a:after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  width: 0%;
+  content: '.';
+  color: transparent;
+  background: #aaa;
+  height: 1px;
+}
+
+nav.stroke ul li a:hover:after {
+  width: 100%;
+}
+
+#sidebar-wrapper .sidebar-heading {
+  padding: 0.875rem 1.25rem;
+  font-size: 1.2rem;
+}
+
+.sidebar-item {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 60px;
+}
+
+#sidebar {
+  height: 100%;
+  background: yellow;
+}
+
+.hugeModal > .modal-dialog {
+  max-width: 90% !important;
+  width: 90% !important;
+}
+
+.ouput-display {
+  white-space: pre;
+  background-color: lightgrey;
+}
+
+.cdk-overlay-container { z-index: 9999; }
+
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
