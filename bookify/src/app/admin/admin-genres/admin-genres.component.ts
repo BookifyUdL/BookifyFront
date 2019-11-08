@@ -23,6 +23,7 @@ export class AdminGenresComponent implements OnInit {
 
   displayedColumns: string[] = ['id', 'name', 'action'];
   registerForm: FormGroup;
+  newGenreForm: FormGroup;
   myControl = new FormControl();
   currentGenre: Genre;
 
@@ -33,6 +34,9 @@ export class AdminGenresComponent implements OnInit {
 
     this.registerForm = new FormGroup({
       _id : new FormControl(['', Validators.required]),
+      name: new FormControl(['', Validators.required])
+    });
+    this.newGenreForm = new FormGroup({
       name: new FormControl(['', Validators.required])
     });
   }
@@ -53,16 +57,23 @@ export class AdminGenresComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
+  onNewGenre() {
+    const genre = new Genre();
+    genre.name = this.newGenreForm.get('name').value;
+    genre._id = String(Number(this.genres[this.genres.length - 1]._id) + 1);
+    this.genres.push(genre);
+    this.dataSource = new MatTableDataSource(this.genres);
+    this.modalService.dismissAll();
+  }
+
   openModal(content, id) {
     this.modalService.open(content, {ariaLabelledBy: id}).result.
     then((result) => {
-      /*this.registerForm.reset();
-      this.newStudentForm.reset();
-      this.submitted = false;*/
+      this.registerForm.reset();
+      this.newGenreForm.reset();
     }, (reason) => {
-      /*this.registerForm.reset();
-      this.submitted = false;
-      this.newStudentForm.reset();*/
+      this.registerForm.reset();
+      this.newGenreForm.reset();
     });
   }
 }
