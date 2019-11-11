@@ -18,6 +18,7 @@ import {
   MatTableModule, MatCardModule, MatRadioModule, MatIconModule
 } from '@angular/material';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import { AdminAchievementsComponent } from './admin/admin-achievements/admin-achievements.component';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     AppComponent,
     AdminSidebarComponent,
     AdminGenresComponent,
-    AdminMainComponent
+    AdminMainComponent,
+    AdminAchievementsComponent
   ],
   imports: [
     BrowserModule,
