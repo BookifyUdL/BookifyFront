@@ -21,6 +21,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AdminAchievementsComponent } from './admin/admin-achievements/admin-achievements.component';
 import { AdminShopsComponent } from './admin/admin-shops/admin-shops.component';
 import { AdminItemsComponent } from './admin/admin-items/admin-items.component';
+import { AdminAuthorsComponent } from './admin/admin-authors/admin-authors.component';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { AdminItemsComponent } from './admin/admin-items/admin-items.component';
     AdminMainComponent,
     AdminAchievementsComponent,
     AdminShopsComponent,
-    AdminItemsComponent
+    AdminItemsComponent,
+    AdminAuthorsComponent
   ],
   imports: [
     BrowserModule,
