@@ -2,8 +2,8 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Shop} from '../../shop/shop';
-import {Achievement} from '../../achievement/achievements';
+import {Shop} from '../../models/shop/shop';
+import {Achievement} from '../../models/achievement/achievements';
 
 @Component({
   selector: 'app-admin-shops',

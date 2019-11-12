@@ -2,8 +2,8 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Achievement} from '../../achievement/achievements';
-import {Genre} from '../../genre/genre';
+import {Achievement} from '../../models/achievement/achievements';
+import {Genre} from '../../models/genre/genre';
 
 @Component({
   selector: 'app-admin-achievements',

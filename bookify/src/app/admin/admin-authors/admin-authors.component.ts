@@ -1,9 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
-import {Item} from '../../item/item';
+import {Item} from '../../models/item/item';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Author} from '../../author/author';
+import {Author} from '../../models/author/author';
 
 @Component({
   selector: 'app-admin-authors',
