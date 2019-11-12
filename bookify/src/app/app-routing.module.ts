@@ -4,6 +4,7 @@ import { AdminGenresComponent } from './admin/admin-genres/admin-genres.componen
 import { AdminMainComponent } from './admin/admin-main/admin-main.component';
 import { AdminAchievementsComponent } from './admin/admin-achievements/admin-achievements.component';
 import { AdminShopsComponent } from './admin/admin-shops/admin-shops.component';
+import { AdminItemsComponent } from './admin/admin-items/admin-items.component';
 
 
 const routes: Routes = [
@@ -11,6 +12,7 @@ const routes: Routes = [
   { path: 'admin/genres', component: AdminGenresComponent },
   { path: 'admin/achievements', component: AdminAchievementsComponent },
   { path: 'admin/shops', component: AdminShopsComponent },
+  { path: 'admin/items', component: AdminItemsComponent },
 ];
 
 @NgModule({
