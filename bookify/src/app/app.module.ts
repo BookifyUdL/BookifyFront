@@ -19,6 +19,7 @@ import {
 } from '@angular/material';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AdminAchievementsComponent } from './admin/admin-achievements/admin-achievements.component';
+import { AdminShopsComponent } from './admin/admin-shops/admin-shops.component';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { AdminAchievementsComponent } from './admin/admin-achievements/admin-ach
     AdminSidebarComponent,
     AdminGenresComponent,
     AdminMainComponent,
-    AdminAchievementsComponent
+    AdminAchievementsComponent,
+    AdminShopsComponent
   ],
   imports: [
     BrowserModule,
