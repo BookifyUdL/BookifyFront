@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import { Genre } from '../../genre/genre';
+import { Genre } from '../../models/genre/genre';
 import { MatTableDataSource } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -24,7 +24,6 @@ export class AdminGenresComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'action'];
   registerForm: FormGroup;
   newGenreForm: FormGroup;
-  myControl = new FormControl();
   currentGenre: Genre;
 
   constructor(private modalService: NgbModal, private formBuilder: FormBuilder) { }
@@ -47,8 +46,8 @@ export class AdminGenresComponent implements OnInit {
   }
 
   openEditGenre(genre: Genre) {
-    this.myControl.setValue(genre.name);
     this.currentGenre = genre;
+    this.registerForm.controls['name'].setValue(genre.name);
     this.openModal(this.editGenreTemplate, 'modal-edit-genre');
   }
 

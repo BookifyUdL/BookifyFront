@@ -2,8 +2,8 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Achievement} from '../../achievement/achievements';
-import {Genre} from '../../genre/genre';
+import {Achievement} from '../../models/achievement/achievements';
+import {Genre} from '../../models/genre/genre';
 
 @Component({
   selector: 'app-admin-achievements',
@@ -29,7 +29,7 @@ export class AdminAchievementsComponent implements OnInit {
   myControl = new FormControl();
   currentAchiev: Achievement;
 
-  constructor(private modalService: NgbModal, private formBuilder: FormBuilder) { }
+  constructor(private modalService: NgbModal) { }
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource(this.achievements);
@@ -54,10 +54,19 @@ export class AdminAchievementsComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.achievements);
   }
 
+  onEditAchievement() {
+    this.currentAchiev.text = this.registerForm.get('text').value;
+    this.currentAchiev.points = this.registerForm.get('points').value;
+    this.currentAchiev.rank = this.registerForm.get('rank').value;
+    this.modalService.dismissAll();
+  }
 
   openEditAchievement(achievement: Achievement) {
     this.myControl.setValue(achievement.text);
     this.currentAchiev = achievement;
+    this.registerForm.controls['text'].setValue(achievement.text);
+    this.registerForm.controls['points'].setValue(achievement.points);
+    this.registerForm.controls['rank'].setValue(achievement.rank);
     this.openModal(this.editAchievementTemplate, 'modal-edit-achievement');
   }
 
