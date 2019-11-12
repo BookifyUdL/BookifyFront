@@ -56,7 +56,17 @@ export class AdminShopsComponent implements OnInit {
 
   openEditShop(shop: Shop) {
     this.currentShop = shop;
+    this.registerForm.controls['name'].setValue(shop.name);
+    this.registerForm.controls['url'].setValue(shop.url);
+
+
     this.openModal(this.editShopTemplate, 'modal-edit-shop');
+  }
+
+  onEditShop() {
+    this.currentShop.name = this.registerForm.get('name').value;
+    this.currentShop.url = this.registerForm.get('url').value;
+    this.modalService.dismissAll();
   }
 
   openModal(content, id) {
