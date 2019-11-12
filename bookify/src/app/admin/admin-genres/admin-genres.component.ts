@@ -24,7 +24,6 @@ export class AdminGenresComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'action'];
   registerForm: FormGroup;
   newGenreForm: FormGroup;
-  myControl = new FormControl();
   currentGenre: Genre;
 
   constructor(private modalService: NgbModal, private formBuilder: FormBuilder) { }
@@ -47,8 +46,8 @@ export class AdminGenresComponent implements OnInit {
   }
 
   openEditGenre(genre: Genre) {
-    this.myControl.setValue(genre.name);
     this.currentGenre = genre;
+    this.registerForm.controls['name'].setValue(genre.name);
     this.openModal(this.editGenreTemplate, 'modal-edit-genre');
   }
 
