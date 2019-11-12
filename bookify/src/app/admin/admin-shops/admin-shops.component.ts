@@ -69,6 +69,11 @@ export class AdminShopsComponent implements OnInit {
     this.modalService.dismissAll();
   }
 
+  remove(id: any) {
+    this.shops = this.shops.filter(shop => String(shop._id) !== String(id));
+    this.dataSource = new MatTableDataSource(this.shops);
+  }
+
   openModal(content, id) {
     this.modalService.open(content, {ariaLabelledBy: id}).result.
     then((result) => {
