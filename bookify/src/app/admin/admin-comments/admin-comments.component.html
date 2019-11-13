@@ -1,1 +1,134 @@
-<p>admin-comments works!</p>
+<ng-template #editComment let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-edit-comment">Edit Comment</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="registerForm" (ngSubmit)="onEditComment()">
+      <div class="form-group flex-column">
+
+        <mat-form-field class="example-full-width">
+          <input type="text" placeholder="ID" aria-label="ID" matInput value="{{current._id}}" readonly disabled>
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="commentType" type="text" placeholder="Comment Type" aria-label="Name" matInput value="{{current.commentType}}">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="comment" type="text" placeholder="Comment" aria-label="Name" matInput value="{{current.comment}}">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="url" type="text" placeholder="URL" aria-label="Name" matInput value="{{current.url}}">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="subReview" type="text" placeholder="Subreview" aria-label="Name" matInput value="{{current.subReview}}">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="user" type="text" placeholder="User" aria-label="Name" matInput value="{{current.user}}">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="userLiked" type="text" placeholder="User Liked" aria-label="Name" matInput value="{{current.userLiked}}">
+        </mat-form-field>
+        <br>
+
+
+      </div>
+
+      <div class="form-group">
+        <button [disabled]="loading" class="btn btn-outline-dark">Submit</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<div class="d-flex container-full full-height" id="wrapper">
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <div class="mt-3 ml-3 container-80">
+    <h2>Comments</h2>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z1 container-full">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let element">
+          <!--<a [routerLink]="['/assignments', element._id]"> {{element.name}}</a>-->
+          <a> {{element._id}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="comment">
+          <th mat-header-cell *matHeaderCellDef> Comment </th>
+        <td mat-cell *matCellDef="let element">
+          <!--<a [routerLink]="['/assignments', element._id]"> {{element.name}}</a>-->
+          <a> {{element.comment}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="user">
+        <th mat-header-cell *matHeaderCellDef> User </th>
+        <td mat-cell *matCellDef="let element">
+          <!--<a [routerLink]="['/assignments', element._id]"> {{element.name}}</a>-->
+          <a> {{element.user}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="commentType">
+        <th mat-header-cell *matHeaderCellDef> Comment Type </th>
+        <td mat-cell *matCellDef="let element">
+          <!--<a [routerLink]="['/assignments', element._id]"> {{element.name}}</a>-->
+          <a> {{element.commentType}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="url">
+        <th mat-header-cell *matHeaderCellDef> URL </th>
+        <td mat-cell *matCellDef="let element">
+          <!--<a [routerLink]="['/assignments', element._id]"> {{element.name}}</a>-->
+          <a> {{element.url}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="subReview">
+        <th mat-header-cell *matHeaderCellDef> Subreview </th>
+        <td mat-cell *matCellDef="let element">
+          <!--<a [routerLink]="['/assignments', element._id]"> {{element.name}}</a>-->
+          <a> {{element.subReview}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="userLiked">
+        <th mat-header-cell *matHeaderCellDef> Likes </th>
+        <td mat-cell *matCellDef="let element">
+          <!--<a [routerLink]="['/assignments', element._id]"> {{element.name}}</a>-->
+          <a> {{element.userLiked}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>  </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-raised-button color="warn" (click)="remove(element._id)">Delete</button>
+          &nbsp;
+          <button mat-raised-button color="primary" (click)="openEditComment(element)">Edit</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>
