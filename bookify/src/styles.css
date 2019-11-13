@@ -168,7 +168,10 @@ nav.stroke ul li a:hover:after {
   border-width: 1px 1px 1px 1px;
   background-color: #424242;
   color: white;
+}
 
+.example-full-width {
+  color: white;
 }
 
 #sidebar {
