@@ -23,6 +23,7 @@ import { AdminShopsComponent } from './admin/admin-shops/admin-shops.component';
 import { AdminItemsComponent } from './admin/admin-items/admin-items.component';
 import { AdminAuthorsComponent } from './admin/admin-authors/admin-authors.component';
 import { AdminCommentsComponent } from './admin/admin-comments/admin-comments.component';
+import { AdminReviewsComponent } from './admin/admin-reviews/admin-reviews.component';
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import { AdminCommentsComponent } from './admin/admin-comments/admin-comments.co
     AdminShopsComponent,
     AdminItemsComponent,
     AdminAuthorsComponent,
-    AdminCommentsComponent
+    AdminCommentsComponent,
+    AdminReviewsComponent
   ],
   imports: [
     BrowserModule,
