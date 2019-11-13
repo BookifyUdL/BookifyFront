@@ -6,6 +6,7 @@ import { AdminAchievementsComponent } from './admin/admin-achievements/admin-ach
 import { AdminShopsComponent } from './admin/admin-shops/admin-shops.component';
 import { AdminItemsComponent } from './admin/admin-items/admin-items.component';
 import { AdminAuthorsComponent } from './admin/admin-authors/admin-authors.component';
+import { AdminCommentsComponent } from './admin/admin-comments/admin-comments.component';
 
 
 const routes: Routes = [
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'admin/shops', component: AdminShopsComponent },
   { path: 'admin/items', component: AdminItemsComponent },
   { path: 'admin/authors', component: AdminAuthorsComponent },
+  { path: 'admin/comments', component: AdminCommentsComponent },
 ];
 
 @NgModule({
