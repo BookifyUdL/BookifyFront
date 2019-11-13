@@ -1,9 +1,8 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Item} from '../../models/item/item';
-import {Achievement} from '../../models/achievement/achievements';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Item } from '../../models/item/item';
 
 @Component({
   selector: 'app-admin-items',
@@ -25,7 +24,6 @@ export class AdminItemsComponent implements OnInit {
   displayedColumns: string[] = ['id', 'shopId', 'bookId', 'price', 'action'];
   registerForm: FormGroup;
   newItemForm: FormGroup;
-  myControl = new FormControl();
   current: Item;
 
   constructor(private modalService: NgbModal) { }
