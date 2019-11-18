@@ -100,6 +100,7 @@ export class AdminBooksComponent implements OnInit {
     book.provider = this.newForm.get('provider').value;
     book.summary = this.newForm.get('summary').value;
     book.year = this.newForm.get('year').value;
+    book._id = String(Number(this.books[this.books.length - 1]._id) + 1);
 
     this.books.push(book);
     this.dataSource = new MatTableDataSource(this.books);

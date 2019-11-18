@@ -25,6 +25,7 @@ import { AdminAuthorsComponent } from './admin/admin-authors/admin-authors.compo
 import { AdminCommentsComponent } from './admin/admin-comments/admin-comments.component';
 import { AdminReviewsComponent } from './admin/admin-reviews/admin-reviews.component';
 import { AdminBooksComponent } from './admin/admin-books/admin-books.component';
+import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { AdminBooksComponent } from './admin/admin-books/admin-books.component';
     AdminAuthorsComponent,
     AdminCommentsComponent,
     AdminReviewsComponent,
-    AdminBooksComponent
+    AdminBooksComponent,
+    AdminUsersComponent
   ],
   imports: [
     BrowserModule,
