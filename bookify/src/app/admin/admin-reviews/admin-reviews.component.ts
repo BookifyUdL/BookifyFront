@@ -1,10 +1,8 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
-import {Item} from '../../models/item/item';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Review} from '../../models/review/review';
-import {currentId} from 'async_hooks';
 
 @Component({
   selector: 'app-admin-reviews',

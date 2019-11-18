@@ -1,1 +1,208 @@
-<p>admin-books works!</p>
+<ng-template #newBook let-modalnew>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-new-book">Edit Book</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="newForm" (ngSubmit)="onNewBook()">
+      <div class="form-group flex-column">
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="title" type="text" placeholder="Title" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="author" type="text" placeholder="Author" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="extension" type="number" placeholder="Extension" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="genre" type="text" placeholder="Genre" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="picture" type="text" placeholder="Picture" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="provider" type="text" placeholder="Provider" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="summary" type="text" placeholder="Summary" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="year" type="number" placeholder="Year" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+
+      </div>
+
+      <div class="form-group">
+        <button [disabled]="loading" class="btn btn-outline-dark">Submit</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #editBook let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-edit-book">Edit Book</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="registerForm" (ngSubmit)="onEditBook()">
+      <div class="form-group flex-column">
+
+        <mat-form-field class="example-full-width">
+          <input type="text" placeholder="ID" aria-label="ID" matInput value="{{current._id}}" readonly disabled>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="title" type="text" placeholder="Title" aria-label="Name" matInput value="{{current.title}}">
+        </mat-form-field>
+
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="author" type="text" placeholder="Author" aria-label="Name" matInput value="{{current.author}}">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="picture" type="text" placeholder="Picture" aria-label="Name" matInput value="{{current.picture}}">
+        </mat-form-field>
+        <br>
+
+        <mat-form-field class="example-full-width">
+          <input formControlName="genre" type="text" placeholder="Genre" aria-label="Name" matInput value="{{current.genre}}">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="year" type="number" placeholder="Year" aria-label="Name" matInput value="{{current.year}}">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="extension" type="number" placeholder="Pages" aria-label="Name" matInput value="{{current.extension}}">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="provider" type="number" placeholder="Provider" aria-label="Name" matInput value="{{current.provider}}">
+        </mat-form-field>
+        <br>
+
+      </div>
+
+      <div class="form-group">
+        <button [disabled]="loading" class="btn btn-outline-dark">Submit</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<div class="d-flex container-full full-height" id="wrapper">
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <div class="mt-3 ml-3 container-80">
+    <h2>Books</h2>
+
+    <span class="table-add float-right mb-3 mr-lg-n5">
+        <a class="text-success">
+          <button mat-raised-button color="primary" class="btn btn-outline-primary mr-lg-5" size="sm" (click)="openModal(newBook, 'modalnew')">New Book</button>
+        </a>
+    </span>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z1 container-full">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element._id}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef> Title </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.title}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="author">
+        <th mat-header-cell *matHeaderCellDef> Author </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.author}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="extension">
+        <th mat-header-cell *matHeaderCellDef> Price </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.extension}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="genre">
+        <th mat-header-cell *matHeaderCellDef> Genre </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.genre}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="picture">
+        <th mat-header-cell *matHeaderCellDef> Picture </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.picture}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="provider">
+        <th mat-header-cell *matHeaderCellDef> Provider </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.provider}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="summary">
+        <th mat-header-cell *matHeaderCellDef> Summary </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.summary}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="year">
+        <th mat-header-cell *matHeaderCellDef> Year </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.year}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>  </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-raised-button color="warn" (click)="remove(element._id)">Delete</button>
+          &nbsp;
+          <button mat-raised-button color="primary" (click)="openEditBook(element)">Edit</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>
