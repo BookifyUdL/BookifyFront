@@ -63,7 +63,7 @@ export class AdminBooksComponent implements OnInit {
     this.dataSource = new MatTableDataSource(this.books);
   }
 
-  onEditReview() {
+  onEditBook() {
     this.current.title = this.registerForm.get('title').value;
     this.current.author = this.registerForm.get('author').value;
     this.current.extension = this.registerForm.get('extension').value;
