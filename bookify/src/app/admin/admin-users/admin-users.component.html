@@ -1,1 +1,231 @@
-<p>admin-users works!</p>
+<ng-template #newUser let-modalnew>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-new-user">Edit User</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="newForm" (ngSubmit)="onNewUser()">
+      <div class="form-group flex-column">
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="name" type="text" placeholder="Name" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="email" type="text" placeholder="Email" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="achievements" type="text" placeholder="Achievements" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="firebaseId" type="text" placeholder="Firebase ID" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="genres" type="text" placeholder="Genres" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="interested_book" type="text" placeholder="Interested Books" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="library" type="text" placeholder="Library" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="premium" type="text" placeholder="Premium" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="read_book" type="text" placeholder="Books Read" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="userPicture" type="text" placeholder="User Picture" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+
+      </div>
+
+      <div class="form-group">
+        <button [disabled]="loading" class="btn btn-outline-dark">Submit</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #editUser let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-edit-user">Edit User</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="registerForm" (ngSubmit)="onEditUser()">
+      <div class="form-group flex-column">
+
+        <mat-form-field class="example-full-width">
+          <input type="text" placeholder="ID" aria-label="ID" matInput value="{{current._id}}" readonly disabled>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="name" type="text" placeholder="Name" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="email" type="text" placeholder="Email" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="achievements" type="text" placeholder="Achievements" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="firebaseId" type="text" placeholder="Firebase ID" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="genres" type="text" placeholder="Genres" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="interested_book" type="text" placeholder="Interested Books" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="library" type="text" placeholder="Library" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="premium" type="text" placeholder="Premium" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="read_book" type="text" placeholder="Books Read" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="example-full-width">
+          <input formControlName="userPicture" type="text" placeholder="User Picture" aria-label="Name" matInput value="">
+        </mat-form-field>
+        <br>
+
+      </div>
+
+      <div class="form-group">
+        <button [disabled]="loading" class="btn btn-outline-dark">Submit</button>
+      </div>
+    </form>
+  </div>
+</ng-template>
+
+<div class="d-flex container-full full-height" id="wrapper">
+  <app-admin-sidebar></app-admin-sidebar>
+
+  <div class="mt-3 ml-3 container-80">
+    <h2>Users</h2>
+
+    <span class="table-add float-right mb-3 mr-lg-n5">
+        <a class="text-success">
+          <button mat-raised-button color="primary" class="btn btn-outline-primary mr-lg-5" size="sm" (click)="openModal(newUser, 'modalnew')">New User</button>
+        </a>
+    </span>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z1 container-full">
+
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef> ID </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element._id}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.name}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.email}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="achievements">
+        <th mat-header-cell *matHeaderCellDef> Achievements </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.achievements}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="firebaseId">
+        <th mat-header-cell *matHeaderCellDef> Firebase ID </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.firebaseId}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="genres">
+        <th mat-header-cell *matHeaderCellDef> Genres </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.genres}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="interested_books">
+        <th mat-header-cell *matHeaderCellDef> Interested Books </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.interested_books}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="library">
+        <th mat-header-cell *matHeaderCellDef> Library </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.library}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="premium">
+        <th mat-header-cell *matHeaderCellDef> Premium </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.premium}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="read_book">
+        <th mat-header-cell *matHeaderCellDef> Books Read </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.read_book}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="userPicture">
+        <th mat-header-cell *matHeaderCellDef> User's Picture </th>
+        <td mat-cell *matCellDef="let element">
+          <a> {{element.userPicture}} </a>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>  </th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-raised-button color="warn" (click)="remove(element._id)">Delete</button>
+          &nbsp;
+          <button mat-raised-button color="primary" (click)="openEditUser(element)">Edit</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>
