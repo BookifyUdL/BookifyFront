@@ -3,6 +3,7 @@ import { Genre } from '../../models/genre/genre';
 import { MatTableDataSource } from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {DataGenreService} from '../../models/genre/data-genre.service';
 
 @Component({
   selector: 'app-admin-genres',
@@ -14,54 +15,101 @@ export class AdminGenresComponent implements OnInit {
   @ViewChild('editGenre', {static: false}) editGenreTemplate: ElementRef;
 
   dataSource: MatTableDataSource<Genre>;
-  genres: Genre[] = [
-    {_id : '1', name: 'Drama'},
-    {_id : '2', name: 'SciFi'},
-    {_id : '3', name: 'Tech'},
-    {_id : '4', name: 'Comedy'},
-  ];
+  genres: Genre[];
 
-  displayedColumns: string[] = ['id', 'name', 'action'];
+  displayedColumns: string[] = ['id', 'name', 'picture', 'action'];
   registerForm: FormGroup;
   newGenreForm: FormGroup;
   currentGenre: Genre;
 
-  constructor(private modalService: NgbModal, private formBuilder: FormBuilder) { }
+  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, private dataService: DataGenreService) { }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.genres);
+    this.dataService.getGenres().subscribe(
+      result => {
+        this.genres = result.genres;
+        this.dataSource = new MatTableDataSource(this.genres);
+      }
+    );
 
     this.registerForm = new FormGroup({
       _id : new FormControl(['', Validators.required]),
-      name: new FormControl(['', Validators.required])
+      name: new FormControl(['', Validators.required]),
+      picture: new FormControl(['', Validators.required])
     });
     this.newGenreForm = new FormGroup({
-      name: new FormControl(['', Validators.required])
+      name: new FormControl(['', Validators.required]),
+      picture: new FormControl(['', Validators.required])
     });
   }
 
   remove(id: any) {
-    this.genres = this.genres.filter(genre => String(genre._id) !== String(id));
-    this.dataSource = new MatTableDataSource(this.genres);
+    this.dataService.deleteGenre(id)
+      .subscribe(() => {
+          this.genres.forEach((item, index) => {
+            if (item._id === id) {
+              this.genres.splice(index, 1);
+            }
+          });
+
+          this.dataSource = new MatTableDataSource(this.genres);
+        }
+      );
   }
 
   openEditGenre(genre: Genre) {
     this.currentGenre = genre;
     this.registerForm.controls['name'].setValue(genre.name);
+    this.registerForm.controls['picture'].setValue(genre.picture);
     this.openModal(this.editGenreTemplate, 'modal-edit-genre');
   }
 
   onEditGenre() {
-    this.currentGenre.name = this.registerForm.get('name').value;
-    this.modalService.dismissAll();
+    const toUpdate = [];
+
+    if (this.currentGenre.name !== this.registerForm.get('name').value) {
+      this.currentGenre.name = this.registerForm.get('name').value;
+      toUpdate.push({propName: "name", value: this.registerForm.get('name').value});
+    }
+
+    if (this.currentGenre.picture !== this.registerForm.get('picture').value) {
+      this.currentGenre.picture = this.registerForm.get('picture').value;
+      toUpdate.push({propName: "picture", value: this.registerForm.get('picture').value});
+    }
+
+    if (toUpdate.length === 0) {
+      this.modalService.dismissAll();
+      return;
+    }
+
+    this.dataService.updateGenre(this.currentGenre._id, toUpdate)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(this.genres);
+          this.modalService.dismissAll();
+        }
+      );
   }
 
   onNewGenre() {
+
+    if (this.newGenreForm.invalid) {
+      return;
+    }
+
     const genre = new Genre();
     genre.name = this.newGenreForm.get('name').value;
-    genre._id = String(Number(this.genres[this.genres.length - 1]._id) + 1);
-    this.genres.push(genre);
-    this.dataSource = new MatTableDataSource(this.genres);
+    genre.picture = this.newGenreForm.get('picture').value;
+
+
+    this.dataService.newGenre(genre)
+      .subscribe(res => {
+          this.genres.push(res['createdGenre']);
+          this.dataSource = new MatTableDataSource(this.genres);
+        }, (err) => {
+          console.log(err);
+        }
+      );
+
     this.modalService.dismissAll();
   }
 

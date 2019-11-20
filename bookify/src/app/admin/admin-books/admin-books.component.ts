@@ -1,10 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Book } from '../../models/book/book';
-import {Review} from '../../models/review/review';
-import {Genre} from '../../models/genre/genre';
 
 @Component({
   selector: 'app-admin-books',

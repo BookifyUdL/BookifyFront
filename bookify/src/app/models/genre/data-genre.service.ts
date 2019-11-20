@@ -17,7 +17,7 @@ export class DataGenreService {
 
   constructor( private http: HttpClient ) { }
 
-  getGenres(): Observable<Genre[]> {
+  getGenres(): Observable<any> {
     return this.http.get<Genre[]>(this.genreUrl);
   }
 
