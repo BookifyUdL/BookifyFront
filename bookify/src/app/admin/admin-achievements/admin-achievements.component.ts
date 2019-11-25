@@ -3,7 +3,7 @@ import {MatTableDataSource} from '@angular/material';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Achievement} from '../../models/achievement/achievements';
-import {Genre} from '../../models/genre/genre';
+import {DataAchievementService} from '../../models/achievement/data-achievement.service';
 
 @Component({
   selector: 'app-admin-achievements',
@@ -15,56 +15,87 @@ export class AdminAchievementsComponent implements OnInit {
   @ViewChild('editAchievement', {static: false}) editAchievementTemplate: ElementRef;
 
   dataSource: MatTableDataSource<Achievement>;
-  achievements: Achievement[] = [
-    {_id : '1', text: 'Read 5 books', points: 10, rank: 3},
-    {_id : '2', text: 'Read 10 books', points: 20, rank: 2},
-    {_id : '3', text: 'Read 20 books', points: 30, rank: 1},
-    {_id : '4', text: 'Rate a book', points: 3, rank: 10},
-    {_id : '5', text: 'Comment on a book', points: 3, rank: 10}
-  ];
+  achievements: Achievement[];
 
-  displayedColumns: string[] = ['id', 'text', 'rank', 'points', 'action'];
+  displayedColumns: string[] = ['id', 'name', 'rank', 'points', 'action'];
   registerForm: FormGroup;
   newAchievementForm: FormGroup;
   myControl = new FormControl();
   currentAchiev: Achievement;
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, private dataService: DataAchievementService) { }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.achievements);
+    this.dataService.getAchievements().subscribe(
+      result => {
+        this.achievements = result.achievements;
+        this.dataSource = new MatTableDataSource(this.achievements);
+      }
+    );
 
     this.registerForm = new FormGroup({
       _id : new FormControl(['', Validators.required]),
-      text: new FormControl(['', Validators.required]),
+      name: new FormControl(['', Validators.required]),
       points: new FormControl(['', Validators.required]),
       rank: new FormControl(['', Validators.required])
     });
 
     this.newAchievementForm = new FormGroup({
       name: new FormControl(['', Validators.required]),
-      text: new FormControl(['', Validators.required]),
       points: new FormControl(['', Validators.required]),
       rank: new FormControl(['', Validators.required])
     });
   }
 
   remove(id: any) {
-    this.achievements = this.achievements.filter(achievement => String(achievement._id) !== String(id));
-    this.dataSource = new MatTableDataSource(this.achievements);
+    this.dataService.deleteAchievement(id)
+      .subscribe(() => {
+          this.achievements.forEach((item, index) => {
+            if (item._id === id) {
+              this.achievements.splice(index, 1);
+            }
+          });
+
+          this.dataSource = new MatTableDataSource(this.achievements);
+        }
+      );
   }
 
   onEditAchievement() {
-    this.currentAchiev.text = this.registerForm.get('text').value;
-    this.currentAchiev.points = this.registerForm.get('points').value;
-    this.currentAchiev.rank = this.registerForm.get('rank').value;
-    this.modalService.dismissAll();
+    const toUpdate = [];
+
+    if (this.currentAchiev.name !== this.registerForm.get('name').value) {
+      this.currentAchiev.name = this.registerForm.get('name').value;
+      toUpdate.push({propName: "name", value: this.registerForm.get('name').value});
+    }
+
+    if (this.currentAchiev.points !== this.registerForm.get('points').value) {
+      this.currentAchiev.points = this.registerForm.get('points').value;
+      toUpdate.push({propName: "points", value: this.registerForm.get('points').value});
+    }
+
+    if (this.currentAchiev.rank !== this.registerForm.get('rank').value) {
+      this.currentAchiev.rank = this.registerForm.get('rank').value;
+      toUpdate.push({propName: "rank", value: this.registerForm.get('rank').value});
+    }
+
+    if (toUpdate.length === 0) {
+      this.modalService.dismissAll();
+      return;
+    }
+
+    this.dataService.updateAchievement(this.currentAchiev._id, toUpdate)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(this.achievements);
+          this.modalService.dismissAll();
+        }
+      );
   }
 
   openEditAchievement(achievement: Achievement) {
-    this.myControl.setValue(achievement.text);
+    this.myControl.setValue(achievement.name);
     this.currentAchiev = achievement;
-    this.registerForm.controls['text'].setValue(achievement.text);
+    this.registerForm.controls['name'].setValue(achievement.name);
     this.registerForm.controls['points'].setValue(achievement.points);
     this.registerForm.controls['rank'].setValue(achievement.rank);
     this.openModal(this.editAchievementTemplate, 'modal-edit-achievement');
@@ -72,13 +103,19 @@ export class AdminAchievementsComponent implements OnInit {
 
   onNewAchievement() {
     const achievement = new Achievement();
-    achievement.text = this.newAchievementForm.get('text').value;
+    achievement.name = this.newAchievementForm.get('name').value;
     achievement.rank = this.newAchievementForm.get('rank').value;
     achievement.points = this.newAchievementForm.get('points').value;
-    achievement._id = String(Number(this.achievements[this.achievements.length - 1]._id) + 1);
 
-    this.achievements.push(achievement);
-    this.dataSource = new MatTableDataSource(this.achievements);
+    this.dataService.newAchievement(achievement)
+      .subscribe(res => {
+          this.achievements.push(res['createdAchievement']);
+          this.dataSource = new MatTableDataSource(this.achievements);
+        }, (err) => {
+          console.log(err);
+        }
+      );
+
     this.modalService.dismissAll();
   }
 
