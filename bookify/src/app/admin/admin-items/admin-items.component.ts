@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Item } from '../../models/item/item';
+import {DataItemService} from '../../models/item/data-item.service';
 
 @Component({
   selector: 'app-admin-items',
@@ -26,7 +27,7 @@ export class AdminItemsComponent implements OnInit {
   newItemForm: FormGroup;
   current: Item;
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, private dataService: DataItemService) { }
 
   ngOnInit() {
     this.dataSource = new MatTableDataSource(this.items);

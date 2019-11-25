@@ -22,7 +22,7 @@ export class AdminGenresComponent implements OnInit {
   newGenreForm: FormGroup;
   currentGenre: Genre;
 
-  constructor(private modalService: NgbModal, private formBuilder: FormBuilder, private dataService: DataGenreService) { }
+  constructor(private modalService: NgbModal, private dataService: DataGenreService) { }
 
   ngOnInit() {
     this.dataService.getGenres().subscribe(
