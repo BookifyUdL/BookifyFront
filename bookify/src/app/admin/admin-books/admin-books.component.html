@@ -20,7 +20,7 @@
         <br>
 
         <mat-form-field class="example-full-width">
-          <input formControlName="extension" type="number" placeholder="Extension" aria-label="Name" matInput value="">
+          <input formControlName="num_pages" type="number" placeholder="Pages" aria-label="Name" matInput value="">
         </mat-form-field>
         <br>
 
@@ -30,7 +30,7 @@
         <br>
 
         <mat-form-field class="example-full-width">
-          <input formControlName="picture" type="text" placeholder="Picture" aria-label="Name" matInput value="">
+          <input formControlName="cover_image" type="text" placeholder="Picture" aria-label="Name" matInput value="">
         </mat-form-field>
         <br>
 
@@ -45,7 +45,7 @@
         <br>
 
         <mat-form-field class="example-full-width">
-          <input formControlName="year" type="number" placeholder="Year" aria-label="Name" matInput value="">
+          <input formControlName="publication_date" type="number" placeholder="Publication Date" aria-label="Name" matInput value="">
         </mat-form-field>
         <br>
 
@@ -84,7 +84,7 @@
         <br>
 
         <mat-form-field class="example-full-width">
-          <input formControlName="picture" type="text" placeholder="Picture" aria-label="Name" matInput value="{{current.picture}}">
+          <input formControlName="cover_image" type="text" placeholder="Picture" aria-label="Name" matInput value="{{current.cover_image}}">
         </mat-form-field>
         <br>
 
@@ -93,11 +93,11 @@
         </mat-form-field>
         <br>
         <mat-form-field class="example-full-width">
-          <input formControlName="year" type="number" placeholder="Year" aria-label="Name" matInput value="{{current.year}}">
+          <input formControlName="publication_date" type="number" placeholder="Publication Date" aria-label="Name" matInput value="{{current.publication_date}}">
         </mat-form-field>
         <br>
         <mat-form-field class="example-full-width">
-          <input formControlName="extension" type="number" placeholder="Pages" aria-label="Name" matInput value="{{current.extension}}">
+          <input formControlName="num_pages" type="number" placeholder="Pages" aria-label="Name" matInput value="{{current.num_pages}}">
         </mat-form-field>
         <br>
         <mat-form-field class="example-full-width">
@@ -149,10 +149,10 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="extension">
-        <th mat-header-cell *matHeaderCellDef> Price </th>
+      <ng-container matColumnDef="num_pages">
+        <th mat-header-cell *matHeaderCellDef> Pages </th>
         <td mat-cell *matCellDef="let element">
-          <a> {{element.extension}} </a>
+          <a> {{element.num_pages}} </a>
         </td>
       </ng-container>
 
@@ -163,10 +163,10 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="picture">
+      <ng-container matColumnDef="cover_image">
         <th mat-header-cell *matHeaderCellDef> Picture </th>
         <td mat-cell *matCellDef="let element">
-          <a> {{element.picture}} </a>
+          <a> {{element.cover_image}} </a>
         </td>
       </ng-container>
 
@@ -184,10 +184,10 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="year">
-        <th mat-header-cell *matHeaderCellDef> Year </th>
+      <ng-container matColumnDef="publication_date">
+        <th mat-header-cell *matHeaderCellDef> Publication Date </th>
         <td mat-cell *matCellDef="let element">
-          <a> {{element.year}} </a>
+          <a> {{element.publication_date}} </a>
         </td>
       </ng-container>
 
