@@ -4,6 +4,8 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Shop} from '../../models/shop/shop';
 import {Achievement} from '../../models/achievement/achievements';
+import {DataAuthorService} from '../../models/author/data-author.service';
+import {DataShopService} from '../../models/shop/data-shop.service';
 
 @Component({
   selector: 'app-admin-shops',
@@ -15,11 +17,7 @@ export class AdminShopsComponent implements OnInit {
   @ViewChild('editShop', {static: false}) editShopTemplate: ElementRef;
 
   dataSource: MatTableDataSource<Shop>;
-  shops: Shop[] = [
-    {_id : '1', name: 'Amazon', url: 'amazon.com'},
-    {_id : '2', name: 'La Casa Del Libro', url: 'casadellibro.com'},
-    {_id : '3', name: 'Abacus', url: 'abacus.com'},
-  ];
+  shops: Shop[];
 
   displayedColumns: string[] = ['id', 'name', 'url', 'action'];
   registerForm: FormGroup;
@@ -27,10 +25,15 @@ export class AdminShopsComponent implements OnInit {
   myControl = new FormControl();
   currentShop: Shop;
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, private dataService: DataShopService) { }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.shops);
+    this.dataService.getShops().subscribe(
+      result => {
+        this.shops = result.shops;
+        this.dataSource = new MatTableDataSource(this.shops);
+      }
+    );
 
     this.registerForm = new FormGroup({
       _id : new FormControl(['', Validators.required]),
@@ -47,10 +50,17 @@ export class AdminShopsComponent implements OnInit {
     const shop = new Shop();
     shop.name = this.newShopForm.get('name').value;
     shop.url = this.newShopForm.get('url').value;
-    shop._id = String(Number(this.shops[this.shops.length - 1]._id) + 1);
 
-    this.shops.push(shop);
-    this.dataSource = new MatTableDataSource(this.shops);
+    this.dataService.newShop(shop)
+      .subscribe(res => {
+          this.shops.push(res['createdShop']);
+          this.dataSource = new MatTableDataSource(this.shops);
+        }, (err) => {
+          console.log(err);
+        }
+      );
+
+
     this.modalService.dismissAll();
   }
 
@@ -64,14 +74,43 @@ export class AdminShopsComponent implements OnInit {
   }
 
   onEditShop() {
-    this.currentShop.name = this.registerForm.get('name').value;
-    this.currentShop.url = this.registerForm.get('url').value;
-    this.modalService.dismissAll();
+    const toUpdate = [];
+
+    if (this.currentShop.name !== this.registerForm.get('name').value) {
+      this.currentShop.name = this.registerForm.get('name').value;
+      toUpdate.push({propName: 'name', value: this.registerForm.get('name').value});
+    }
+
+    if (this.currentShop.url !== this.registerForm.get('url').value) {
+      this.currentShop.url = this.registerForm.get('url').value;
+      toUpdate.push({propName: 'url', value: this.registerForm.get('url').value});
+    }
+
+    if (toUpdate.length === 0) {
+      this.modalService.dismissAll();
+      return;
+    }
+
+    this.dataService.updateShop(this.currentShop._id, toUpdate)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(this.shops);
+          this.modalService.dismissAll();
+        }
+      );
   }
 
   remove(id: any) {
-    this.shops = this.shops.filter(shop => String(shop._id) !== String(id));
-    this.dataSource = new MatTableDataSource(this.shops);
+    this.dataService.deleteShop(id)
+      .subscribe(() => {
+          this.shops.forEach((item, index) => {
+            if (item._id === id) {
+              this.shops.splice(index, 1);
+            }
+          });
+
+          this.dataSource = new MatTableDataSource(this.shops);
+        }
+      );
   }
 
   openModal(content, id) {
