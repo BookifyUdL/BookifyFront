@@ -14,13 +14,13 @@
         </mat-form-field>
         <br>
         <mat-form-field class="example-full-width">
-          <input formControlName="shopId" type="text" placeholder="Shop ID" aria-label="Name" matInput value="{{current.shopId}}">
+          <input formControlName="shop_id" type="text" placeholder="Shop ID" aria-label="Name" matInput value="{{current.shop_id}}">
         </mat-form-field>
 
         <br>
 
         <mat-form-field class="example-full-width">
-          <input formControlName="bookId" type="number" placeholder="Book ID" aria-label="Name" matInput value="{{current.bookId}}">
+          <input formControlName="book_id" type="text" placeholder="Book ID" aria-label="Name" matInput value="{{current.book_id}}">
         </mat-form-field>
         <br>
 
@@ -49,14 +49,14 @@
       <div class="form-group flex-column">
         <br>
         <mat-form-field class="example-full-width">
-          <input formControlName="shopId" type="text" placeholder="Shop ID" aria-label="text" matInput value="">
+          <input formControlName="shop_id" type="text" placeholder="Shop ID" aria-label="text" matInput value="">
         </mat-form-field>
       </div>
 
       <div class="form-group flex-column">
         <br>
         <mat-form-field class="example-full-width">
-          <input formControlName="bookId" type="number" placeholder="Book ID" aria-label="text" matInput value="">
+          <input formControlName="book_id" type="number" placeholder="Book ID" aria-label="text" matInput value="">
         </mat-form-field>
       </div>
 
@@ -98,19 +98,19 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="shopId">
+      <ng-container matColumnDef="shop_id">
         <th mat-header-cell *matHeaderCellDef> Shop ID </th>
         <td mat-cell *matCellDef="let element">
           <!--<a [routerLink]="['/assignments', element._id]"> {{element.name}}</a>-->
-          <a> {{element.shopId}} </a>
+          <a> {{element.shop_id}} </a>
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="bookId">
+      <ng-container matColumnDef="book_id">
         <th mat-header-cell *matHeaderCellDef> Book ID </th>
         <td mat-cell *matCellDef="let element">
           <!--<a [routerLink]="['/assignments', element._id]"> {{element.name}}</a>-->
-          <a> {{element.bookId}} </a>
+          <a> {{element.book_id}} </a>
         </td>
       </ng-container>
 

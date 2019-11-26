@@ -1,6 +1,6 @@
 export class Item {
   _id: string;
-  shopId: string;
-  bookId: string;
+  shop_id: string;
+  book_id: string;
   price: number;
 }

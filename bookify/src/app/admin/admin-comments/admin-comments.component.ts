@@ -3,7 +3,7 @@ import { MatTableDataSource } from '@angular/material';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Comment } from '../../models/comment/comment';
-import {Item} from '../../models/item/item';
+import { DataCommentService } from '../../models/comments/data-comment.service';
 
 @Component({
   selector: 'app-admin-comments',
@@ -15,22 +15,28 @@ export class AdminCommentsComponent implements OnInit {
   @ViewChild('editComment', {static: false}) editTemplate: ElementRef;
 
   dataSource: MatTableDataSource<Comment>;
-  comments: Comment[] = [
-    {_id : '1', commentType: 1, comment: 'Baffled', url: '', subReview: [], user: null, userLiked: []},
-    {_id : '2', commentType: 1, comment: 'Amazing', url: '', subReview: [], user: null, userLiked: []},
-    {_id : '3', commentType: 2, comment: 'Worst book that I\'ve ever read.', url: 'asd.com/image1.png', subReview: [], user: null,
-      userLiked: []},
-    {_id : '4', commentType: 3, comment: 'Uninteresting at its best', url: 'asd.com/gif1.gif', subReview: [], user: null, userLiked: []},
-  ];
+  comments: Comment[];
+  // comments: Comment[] = [
+  //   {_id : '1', commentType: 1, comment: 'Baffled', url: '', subReview: [], user: null, userLiked: []},
+  //   {_id : '2', commentType: 1, comment: 'Amazing', url: '', subReview: [], user: null, userLiked: []},
+  //   {_id : '3', commentType: 2, comment: 'Worst book that I\'ve ever read.', url: 'asd.com/image1.png', subReview: [], user: null,
+  //     userLiked: []},
+  //   {_id : '4', commentType: 3, comment: 'Uninteresting at its best', url: 'asd.com/gif1.gif', subReview: [], user: null, userLiked: []},
+  // ];
 
   displayedColumns: string[] = ['id', 'commentType', 'comment', 'url', 'subReview', 'user', 'userLiked', 'action'];
   registerForm: FormGroup;
   current: Comment;
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, private dataService: DataCommentService) { }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.comments);
+    this.dataService.getComments().subscribe(
+      result => {
+        this.comments = result.comments;
+        this.dataSource = new MatTableDataSource(this.comments);
+      }
+    );
 
     this.registerForm = new FormGroup({
       _id: new FormControl(['', Validators.required]),
@@ -44,8 +50,17 @@ export class AdminCommentsComponent implements OnInit {
   }
 
   remove(id: any) {
-    this.comments = this.comments.filter(comment => String(comment._id) !== String(id));
-    this.dataSource = new MatTableDataSource(this.comments);
+    this.dataService.deleteComment(id)
+      .subscribe(() => {
+          this.comments.forEach((item, index) => {
+            if (item._id === id) {
+              this.comments.splice(index, 1);
+            }
+          });
+
+          this.dataSource = new MatTableDataSource(this.comments);
+        }
+      );
   }
 
   onEditComment() {
@@ -59,14 +74,52 @@ export class AdminCommentsComponent implements OnInit {
   }
 
   openEditComment(comment: Comment) {
+    const toUpdate = [];
+
     this.current = comment;
-    this.registerForm.controls['commentType'].setValue(comment.commentType);
-    this.registerForm.controls['comment'].setValue(comment.comment);
-    this.registerForm.controls['url'].setValue(comment.url);
-    this.registerForm.controls['subReview'].setValue(comment.subReview);
-    this.registerForm.controls['user'].setValue(comment.user);
-    this.registerForm.controls['userLiked'].setValue(comment.userLiked);
-    this.registerForm.controls['userLiked'].setValue(comment.userLiked);
+
+    if (this.current.commentType !== this.registerForm.get('commentType').value) {
+      this.current.commentType = this.registerForm.get('commentType').value;
+      toUpdate.push({propName: "comment_type", value: this.registerForm.get('commentType').value});
+    }
+
+    if (this.current.comment !== this.registerForm.get('comment').value) {
+      this.current.comment = this.registerForm.get('comment').value;
+      toUpdate.push({propName: "message", value: this.registerForm.get('comment').value});
+    }
+
+    if (this.current.url !== this.registerForm.get('url').value) {
+      this.current.url = this.registerForm.get('url').value;
+      toUpdate.push({propName: "uri", value: this.registerForm.get('url').value});
+    }
+
+    if (this.current.subReview !== this.registerForm.get('subReview').value) {
+      this.current.subReview = this.registerForm.get('subReview').value;
+      toUpdate.push({propName: "subreviews", value: this.registerForm.get('subReview').value});
+    }
+
+    if (this.current.user !== this.registerForm.get('user').value) {
+      this.current.user = this.registerForm.get('user').value;
+      toUpdate.push({propName: "user", value: this.registerForm.get('user').value});
+    }
+
+    if (this.current.userLiked !== this.registerForm.get('userLiked').value) {
+      this.current.userLiked = this.registerForm.get('userLiked').value;
+      toUpdate.push({propName: "user_liked", value: this.registerForm.get('userLiked').value});
+    }
+
+    if (toUpdate.length === 0) {
+      this.modalService.dismissAll();
+      return;
+    }
+
+    this.dataService.updateComment(this.current._id, toUpdate)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(this.comments);
+          this.modalService.dismissAll();
+        }
+      );
+
     this.openModal(this.editTemplate, 'modal-edit-comment');
   }
 

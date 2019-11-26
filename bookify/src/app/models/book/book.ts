@@ -7,9 +7,9 @@ export class Book {
   title: string;
   author: Author;
   summary: string;
-  picture: string;
+  cover_image: string;
   genre: Genre;
-  year: number;
-  extension: number;
+  publication_date: Date;
+  num_pages: number;
   provider: Shop;
 }

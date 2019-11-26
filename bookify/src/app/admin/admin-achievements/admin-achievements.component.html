@@ -14,7 +14,7 @@
         </mat-form-field>
         <br>
         <mat-form-field class="example-full-width">
-          <input formControlName="text" type="text" placeholder="Name" aria-label="Name" matInput value="{{currentAchiev.text}}">
+          <input formControlName="name" type="text" placeholder="Name" aria-label="Name" matInput value="{{currentAchiev.name}}">
         </mat-form-field>
 
         <br>
@@ -49,7 +49,7 @@
       <div class="form-group flex-column">
         <br>
         <mat-form-field class="example-full-width">
-          <input formControlName="text" type="text" placeholder="Text" aria-label="text" matInput value="">
+          <input formControlName="name" type="text" placeholder="Name" aria-label="text" matInput value="">
         </mat-form-field>
       </div>
 
@@ -99,11 +99,11 @@
       </td>
     </ng-container>
 
-    <ng-container matColumnDef="text">
+    <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef> Description </th>
       <td mat-cell *matCellDef="let element">
         <!--<a [routerLink]="['/assignments', element._id]"> {{element.name}}</a>-->
-        <a> {{element.text}} </a>
+        <a> {{element.name}} </a>
       </td>
     </ng-container>
 

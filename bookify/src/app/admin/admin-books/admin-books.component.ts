@@ -1,10 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Book } from '../../models/book/book';
-import {Review} from '../../models/review/review';
-import {Genre} from '../../models/genre/genre';
+import {DataBookService} from '../../models/book/data-book.service';
 
 @Component({
   selector: 'app-admin-books',
@@ -16,94 +15,156 @@ export class AdminBooksComponent implements OnInit {
   @ViewChild('editBook', {static: false}) editTemplate: ElementRef;
 
   dataSource: MatTableDataSource<Book>;
-  books: Book[] = [
-    {_id: '1', title: 'title 1', author: null, extension: 100, genre: null, picture: null, provider: null, summary: 'a book', year: 1000},
-    {_id: '2', title: 'title 2', author: null, extension: 200, genre: null, picture: null, provider: null, summary: 'a book', year: 1000},
-    {_id: '3', title: 'title 3', author: null, extension: 300, genre: null, picture: null, provider: null, summary: 'a book', year: 1000},
-    {_id: '4', title: 'title 4', author: null, extension: 400, genre: null, picture: null, provider: null, summary: 'a book', year: 1000},
-  ];
+  books: Book[];
 
-  displayedColumns: string[] = ['id', 'title', 'author', 'extension', 'genre', 'picture', 'provider', 'summary', 'year', 'action'];
+  displayedColumns: string[] = ['id', 'title', 'author', 'num_pages', 'genre', 'provider', 'publication_date', 'action'];
   registerForm: FormGroup;
   newForm: FormGroup;
   current: Book;
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, private dataService: DataBookService) { }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.books);
+    this.dataService.getBooks().subscribe(
+      result => {
+        this.books = result.books;
+        this.dataSource = new MatTableDataSource(this.books);
+      }
+    );
 
     this.newForm = new FormGroup({
       title: new FormControl(['', Validators.required]),
       author: new FormControl(['', Validators.required]),
-      extension: new FormControl(['', Validators.required]),
+      num_pages: new FormControl(['', Validators.required]),
       genre: new FormControl(['', Validators.required]),
-      picture: new FormControl(['', Validators.required]),
+      cover_image: new FormControl(['', Validators.required]),
       provider: new FormControl(['', Validators.required]),
       summary: new FormControl(['', Validators.required]),
-      year: new FormControl(['', Validators.required]),
+      publication_date: new FormControl(['', Validators.required]),
     });
 
     this.registerForm = new FormGroup({
       _id: new FormControl(['', Validators.required]),
       title: new FormControl(['', Validators.required]),
       author: new FormControl(['', Validators.required]),
-      extension: new FormControl(['', Validators.required]),
+      num_pages: new FormControl(['', Validators.required]),
       genre: new FormControl(['', Validators.required]),
-      picture: new FormControl(['', Validators.required]),
+      cover_image: new FormControl(['', Validators.required]),
       provider: new FormControl(['', Validators.required]),
       summary: new FormControl(['', Validators.required]),
-      year: new FormControl(['', Validators.required]),
+      publication_date: new FormControl(['', Validators.required]),
     });
   }
 
 
   remove(id: any) {
-    this.books = this.books.filter(book => String(book._id) !== String(id));
-    this.dataSource = new MatTableDataSource(this.books);
+    this.dataService.deleteBook(id)
+      .subscribe(() => {
+          this.books.forEach((item, index) => {
+            if (item._id === id) {
+              this.books.splice(index, 1);
+            }
+          });
+
+          this.dataSource = new MatTableDataSource(this.books);
+        }
+      );
   }
 
   onEditBook() {
-    this.current.title = this.registerForm.get('title').value;
-    this.current.author = this.registerForm.get('author').value;
-    this.current.extension = this.registerForm.get('extension').value;
-    this.current.genre = this.registerForm.get('genre').value;
-    this.current.picture = this.registerForm.get('picture').value;
-    this.current.provider = this.registerForm.get('provider').value;
-    this.current.summary = this.registerForm.get('summary').value;
-    this.current.year = this.registerForm.get('year').value;
-    this.modalService.dismissAll();
+    const toUpdate = [];
+
+    if (this.current.title !== this.registerForm.get('title').value) {
+      this.current.title = this.registerForm.get('title').value;
+      toUpdate.push({propName: "title", value: this.registerForm.get('title').value});
+    }
+
+    if (this.current.author !== this.registerForm.get('author').value) {
+      this.current.author = this.registerForm.get('author').value;
+      toUpdate.push({propName: "author", value: this.registerForm.get('author').value});
+    }
+
+    if (this.current.num_pages !== this.registerForm.get('num_pages').value) {
+      this.current.num_pages = this.registerForm.get('num_pages').value;
+      toUpdate.push({propName: "num_pages", value: this.registerForm.get('num_pages').value});
+    }
+
+    if (this.current.genre !== this.registerForm.get('genre').value) {
+      this.current.genre = this.registerForm.get('genre').value;
+      toUpdate.push({propName: "genre", value: this.registerForm.get('genre').value});
+    }
+
+    if (this.current.cover_image !== this.registerForm.get('cover_image').value) {
+      this.current.cover_image = this.registerForm.get('cover_image').value;
+      toUpdate.push({propName: "cover_image", value: this.registerForm.get('cover_image').value});
+    }
+
+    if (this.current.provider !== this.registerForm.get('provider').value) {
+      this.current.provider = this.registerForm.get('provider').value;
+      toUpdate.push({propName: "provider", value: this.registerForm.get('provider').value});
+    }
+
+    if (this.current.summary !== this.registerForm.get('summary').value) {
+      this.current.summary = this.registerForm.get('summary').value;
+      toUpdate.push({propName: "summary", value: this.registerForm.get('summary').value});
+    }
+
+    if (this.current.publication_date !== this.registerForm.get('publication_date').value) {
+      this.current.publication_date = this.registerForm.get('publication_date').value;
+      toUpdate.push({propName: "publication_date", value: this.registerForm.get('publication_date').value});
+    }
+
+    if (toUpdate.length === 0) {
+      this.modalService.dismissAll();
+      return;
+    }
+
+    this.dataService.updateBook(this.current._id, toUpdate)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(this.books);
+          this.modalService.dismissAll();
+        }
+      );
   }
 
   openEditBook(book: Book) {
     this.current = book;
     this.registerForm.controls['title'].setValue(this.current.title);
     this.registerForm.controls['author'].setValue(this.current.author);
-    this.registerForm.controls['extension'].setValue(this.current.extension);
+    this.registerForm.controls['num_pages'].setValue(this.current.num_pages);
     this.registerForm.controls['genre'].setValue(this.current.genre);
-    this.registerForm.controls['picture'].setValue(this.current.picture);
+    this.registerForm.controls['cover_image'].setValue(this.current.cover_image);
     this.registerForm.controls['provider'].setValue(this.current.provider);
     this.registerForm.controls['summary'].setValue(this.current.summary);
-    this.registerForm.controls['year'].setValue(this.current.year);
+    this.registerForm.controls['publication_date'].setValue(this.current.publication_date);
 
     this.openModal(this.editTemplate, 'modal-edit-books');
   }
 
   onNewBook() {
+    if (this.newForm.invalid) {
+      return;
+    }
+
     const book = new Book();
 
     book.title = this.newForm.get('title').value;
     book.author = this.newForm.get('author').value;
-    book.extension = this.newForm.get('extension').value;
+    book.num_pages = this.newForm.get('num_pages').value;
     book.genre = this.newForm.get('genre').value;
-    book.picture = this.newForm.get('picture').value;
+    book.cover_image = this.newForm.get('cover_image').value;
     book.provider = this.newForm.get('provider').value;
     book.summary = this.newForm.get('summary').value;
-    book.year = this.newForm.get('year').value;
-    book._id = String(Number(this.books[this.books.length - 1]._id) + 1);
+    book.publication_date = new Date();
 
-    this.books.push(book);
-    this.dataSource = new MatTableDataSource(this.books);
+    this.dataService.newBook(book)
+      .subscribe(res => {
+          this.books.push(res['createdBook']);
+          this.dataSource = new MatTableDataSource(this.books);
+        }, (err) => {
+          console.log(err);
+        }
+      );
     this.modalService.dismissAll();
   }
 

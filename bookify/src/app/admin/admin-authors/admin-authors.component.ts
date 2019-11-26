@@ -1,9 +1,9 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
-import {Item} from '../../models/item/item';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Author} from '../../models/author/author';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Author } from '../../models/author/author';
+import { DataAuthorService } from '../../models/author/data-author.service';
 
 @Component({
   selector: 'app-admin-authors',
@@ -15,22 +15,22 @@ export class AdminAuthorsComponent implements OnInit {
   @ViewChild('editAuthor', {static: false}) editTemplate: ElementRef;
 
   dataSource: MatTableDataSource<Author>;
-  authors: Author[] = [
-    {_id : '1', name: 'radu spaimoc'},
-    {_id : '2', name: 'conxa mas'},
-    {_id : '3', name: 'luis choclo'},
-  ];
+  authors: Author[];
 
   displayedColumns: string[] = ['id', 'name', 'action'];
   registerForm: FormGroup;
   newAuthorForm: FormGroup;
-  myControl = new FormControl();
   current: Author;
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, private dataService: DataAuthorService) { }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.authors);
+    this.dataService.getAuthors().subscribe(
+      result => {
+        this.authors = result.authors;
+        this.dataSource = new MatTableDataSource(this.authors);
+      }
+    );
 
     this.registerForm = new FormGroup({
       _id : new FormControl(['', Validators.required]),
@@ -43,13 +43,38 @@ export class AdminAuthorsComponent implements OnInit {
   }
 
   remove(id: any) {
-    this.authors = this.authors.filter(author => String(author._id) !== String(id));
-    this.dataSource = new MatTableDataSource(this.authors);
+    this.dataService.deleteAuthor(id)
+      .subscribe(() => {
+          this.authors.forEach((item, index) => {
+            if (item._id === id) {
+              this.authors.splice(index, 1);
+            }
+          });
+
+          this.dataSource = new MatTableDataSource(this.authors);
+        }
+      );
   }
 
   onEditAuthor() {
-    this.current.name = this.registerForm.get('name').value;
-    this.modalService.dismissAll();
+    const toUpdate = [];
+
+    if (this.current.name !== this.registerForm.get('name').value) {
+      this.current.name = this.registerForm.get('name').value;
+      toUpdate.push({propName: 'name', value: this.registerForm.get('name').value});
+    }
+
+    if (toUpdate.length === 0) {
+      this.modalService.dismissAll();
+      return;
+    }
+
+    this.dataService.updateAuthor(this.current._id, toUpdate)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(this.authors);
+          this.modalService.dismissAll();
+        }
+      );
   }
 
   openEditAuthor(author: Author) {
@@ -61,10 +86,17 @@ export class AdminAuthorsComponent implements OnInit {
   onNewAuthor() {
     const author = new Author();
     author.name = this.newAuthorForm.get('name').value;
-    author._id = String(Number(this.authors[this.authors.length - 1]._id) + 1);
 
-    this.authors.push(author);
-    this.dataSource = new MatTableDataSource(this.authors);
+
+    this.dataService.newAuthor(author)
+      .subscribe(res => {
+          this.authors.push(res['createdAuthor']);
+          this.dataSource = new MatTableDataSource(this.authors);
+        }, (err) => {
+          console.log(err);
+        }
+      );
+
     this.modalService.dismissAll();
   }
 
