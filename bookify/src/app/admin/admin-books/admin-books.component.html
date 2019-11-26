@@ -131,7 +131,7 @@
       <ng-container matColumnDef="id">
         <th mat-header-cell *matHeaderCellDef> ID </th>
         <td mat-cell *matCellDef="let element">
-          <a> {{element._id}} </a>
+          <a> {{element._id.substr(0, 10)}} </a>
         </td>
       </ng-container>
 
@@ -163,13 +163,6 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="cover_image">
-        <th mat-header-cell *matHeaderCellDef> Picture </th>
-        <td mat-cell *matCellDef="let element">
-          <a> {{element.cover_image}} </a>
-        </td>
-      </ng-container>
-
       <ng-container matColumnDef="provider">
         <th mat-header-cell *matHeaderCellDef> Provider </th>
         <td mat-cell *matCellDef="let element">
@@ -177,17 +170,10 @@
         </td>
       </ng-container>
 
-      <ng-container matColumnDef="summary">
-        <th mat-header-cell *matHeaderCellDef> Summary </th>
-        <td mat-cell *matCellDef="let element">
-          <a> {{element.summary}} </a>
-        </td>
-      </ng-container>
-
       <ng-container matColumnDef="publication_date">
         <th mat-header-cell *matHeaderCellDef> Publication Date </th>
         <td mat-cell *matCellDef="let element">
-          <a> {{element.publication_date}} </a>
+          <a> {{element.publication_date | date}} </a>
         </td>
       </ng-container>
 

@@ -4,6 +4,7 @@ import {Book} from '../../models/book/book';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {User} from '../../models/user/user';
+import {DataUserService} from '../../models/user/data-user.service';
 
 @Component({
   selector: 'app-admin-users',
@@ -16,22 +17,22 @@ export class AdminUsersComponent implements OnInit {
   @ViewChild('editUser', {static: false}) editTemplate: ElementRef;
 
   dataSource: MatTableDataSource<User>;
-  users: User[] = [
-    {_id: '1', name: 'radu', email: 'rgoldentime@asd', achievements: [], firebaseId: '', genres: [], interested_book: [], library: [], premium: false, read_book: [], userPicture: ''},
-    {_id: '2', name: 'oscar', email: 'oscar@asd', achievements: [], firebaseId: '', genres: [], interested_book: [], library: [], premium: false, read_book: [], userPicture: ''},
-    {_id: '3', name: 'marc', email: 'marc@asd', achievements: [], firebaseId: '', genres: [], interested_book: [], library: [], premium: false, read_book: [], userPicture: ''},
-    {_id: '4', name: 'high overlord', email: 'bossyboss@asd', achievements: [], firebaseId: '', genres: [], interested_book: [], library: [], premium: true, read_book: [], userPicture: ''},
-  ];
+  users: User[];
 
   displayedColumns: string[] = ['id', 'name', 'email', 'achievements', 'firebaseId', 'genres', 'interested_books', 'library', 'premium', 'read_book', 'userPicture', 'action'];
   registerForm: FormGroup;
   newForm: FormGroup;
   current: User;
 
-  constructor(private modalService: NgbModal) { }
+  constructor(private modalService: NgbModal, private dataService: DataUserService) { }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.users);
+    this.dataService.getUsers().subscribe(
+      result => {
+        this.users = result.users;
+        this.dataSource = new MatTableDataSource(this.users);
+      }
+    );
 
     this.newForm = new FormGroup({
       name: new FormControl(['', Validators.required]),
@@ -63,22 +64,83 @@ export class AdminUsersComponent implements OnInit {
 
 
   remove(id: any) {
-    this.users = this.users.filter(user => String(user._id) !== String(id));
-    this.dataSource = new MatTableDataSource(this.users);
+    this.dataService.deleteUser(id)
+      .subscribe(() => {
+          this.users.forEach((item, index) => {
+            if (item._id === id) {
+              this.users.splice(index, 1);
+            }
+          });
+
+          this.dataSource = new MatTableDataSource(this.users);
+        }
+      );
   }
 
   onEditUser() {
-    this.current.name = this.registerForm.get('name').value;
-    this.current.email = this.registerForm.get('email').value;
-    this.current.achievements = this.registerForm.get('achievements').value;
-    this.current.firebaseId = this.registerForm.get('firebaseId').value;
-    this.current.genres = this.registerForm.get('genres').value;
-    this.current.interested_book = this.registerForm.get('interested_book').value;
-    this.current.library = this.registerForm.get('library').value;
-    this.current.premium = this.registerForm.get('premium').value;
-    this.current.read_book = this.registerForm.get('read_book').value;
-    this.current.userPicture = this.registerForm.get('userPicture').value;
-    this.modalService.dismissAll();
+    const toUpdate = [];
+
+    if (this.current.name !== this.registerForm.get('name').value) {
+      this.current.name = this.registerForm.get('name').value;
+      toUpdate.push({propName: 'name', value: this.registerForm.get('name').value});
+    }
+
+    if (this.current.email !== this.registerForm.get('email').value) {
+      this.current.email = this.registerForm.get('email').value;
+      toUpdate.push({propName: 'email', value: this.registerForm.get('email').value});
+    }
+
+    if (this.current.achievements !== this.registerForm.get('achievements').value) {
+      this.current.achievements = this.registerForm.get('achievements').value;
+      toUpdate.push({propName: 'achievements', value: this.registerForm.get('achievements').value});
+    }
+
+    if (this.current.firebaseId !== this.registerForm.get('firebaseId').value) {
+      this.current.firebaseId = this.registerForm.get('firebaseId').value;
+      toUpdate.push({propName: 'firebaseId', value: this.registerForm.get('firebaseId').value});
+    }
+
+    if (this.current.genres !== this.registerForm.get('genres').value) {
+      this.current.genres = this.registerForm.get('genres').value;
+      toUpdate.push({propName: 'genres', value: this.registerForm.get('genres').value});
+    }
+
+    if (this.current.interested_book !== this.registerForm.get('interested_book').value) {
+      this.current.interested_book = this.registerForm.get('interested_book').value;
+      toUpdate.push({propName: 'interested_book', value: this.registerForm.get('interested_book').value});
+    }
+
+    if (this.current.library !== this.registerForm.get('library').value) {
+      this.current.library = this.registerForm.get('library').value;
+      toUpdate.push({propName: 'library', value: this.registerForm.get('library').value});
+    }
+
+    if (this.current.premium !== this.registerForm.get('premium').value) {
+      this.current.premium = this.registerForm.get('premium').value;
+      toUpdate.push({propName: 'premium', value: this.registerForm.get('premium').value});
+    }
+
+    if (this.current.read_book !== this.registerForm.get('read_book').value) {
+      this.current.read_book = this.registerForm.get('read_book').value;
+      toUpdate.push({propName: 'read_book', value: this.registerForm.get('read_book').value});
+    }
+
+    if (this.current.userPicture !== this.registerForm.get('userPicture').value) {
+      this.current.userPicture = this.registerForm.get('userPicture').value;
+      toUpdate.push({propName: 'userPicture', value: this.registerForm.get('userPicture').value});
+    }
+
+    if (toUpdate.length === 0) {
+      this.modalService.dismissAll();
+      return;
+    }
+
+    this.dataService.updateUser(this.current._id, toUpdate)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(this.users);
+          this.modalService.dismissAll();
+        }
+      );
   }
 
   openEditUser(user: User) {
@@ -102,19 +164,24 @@ export class AdminUsersComponent implements OnInit {
 
     user.name = this.registerForm.get('name').value;
     user.email = this.registerForm.get('email').value;
-    user.achievements = this.registerForm.get('achievements').value;
+    user.achievements = [this.registerForm.get('achievements').value];
     user.firebaseId = this.registerForm.get('firebaseId').value;
-    user.genres = this.registerForm.get('genres').value;
-    user.interested_book = this.registerForm.get('interested_book').value;
-    user.library = this.registerForm.get('library').value;
+    user.genres = [this.registerForm.get('genres').value];
+    user.interested_book = [this.registerForm.get('interested_book').value];
+    user.library = [this.registerForm.get('library').value];
     user.premium = this.registerForm.get('premium').value;
-    user.read_book = this.registerForm.get('read_book').value;
+    user.read_book = [this.registerForm.get('read_book').value];
     user.userPicture = this.registerForm.get('userPicture').value;
 
-    user._id = String(Number(this.users[this.users.length - 1]._id) + 1);
+    this.dataService.newUser(user)
+      .subscribe(res => {
+          this.users.push(res['createdUser']);
+          this.dataSource = new MatTableDataSource(this.users);
+        }, (err) => {
+          console.log(err);
+        }
+      );
 
-    this.users.push(user);
-    this.dataSource = new MatTableDataSource(this.users);
     this.modalService.dismissAll();
   }
 

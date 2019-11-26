@@ -17,7 +17,7 @@ export class AdminBooksComponent implements OnInit {
   dataSource: MatTableDataSource<Book>;
   books: Book[];
 
-  displayedColumns: string[] = ['id', 'title', 'author', 'num_pages', 'genre', 'cover_image', 'provider', 'summary', 'publication_date', 'action'];
+  displayedColumns: string[] = ['id', 'title', 'author', 'num_pages', 'genre', 'provider', 'publication_date', 'action'];
   registerForm: FormGroup;
   newForm: FormGroup;
   current: Book;

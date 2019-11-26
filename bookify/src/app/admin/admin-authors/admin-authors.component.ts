@@ -1,11 +1,9 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
-import {Item} from '../../models/item/item';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {Author} from '../../models/author/author';
-import {DataAchievementService} from '../../models/achievement/data-achievement.service';
-import {DataAuthorService} from '../../models/author/data-author.service';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Author } from '../../models/author/author';
+import { DataAuthorService } from '../../models/author/data-author.service';
 
 @Component({
   selector: 'app-admin-authors',
@@ -63,10 +61,8 @@ export class AdminAuthorsComponent implements OnInit {
 
     if (this.current.name !== this.registerForm.get('name').value) {
       this.current.name = this.registerForm.get('name').value;
-      toUpdate.push({propName: "name", value: this.registerForm.get('name').value});
+      toUpdate.push({propName: 'name', value: this.registerForm.get('name').value});
     }
-
-    this.current.name = this.registerForm.get('name').value;
 
     if (toUpdate.length === 0) {
       this.modalService.dismissAll();
