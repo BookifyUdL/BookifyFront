@@ -60,7 +60,6 @@ export class AdminShopsComponent implements OnInit {
         }
       );
 
-
     this.modalService.dismissAll();
   }
 

@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Item } from '../../models/item/item';
 import {DataItemService} from '../../models/item/data-item.service';
+import {Shop} from '../../models/shop/shop';
 
 @Component({
   selector: 'app-admin-items',
@@ -15,14 +16,9 @@ export class AdminItemsComponent implements OnInit {
   @ViewChild('editItem', {static: false}) editTemplate: ElementRef;
 
   dataSource: MatTableDataSource<Item>;
-  items: Item[] = [
-    {_id : '1', shopId: '1', bookId: '1', price: 30},
-    {_id : '2', shopId: '3', bookId: '1', price: 30},
-    {_id : '3', shopId: '4', bookId: '2', price: 30},
-    {_id : '4', shopId: '11', bookId: '3', price: 30},
-  ];
+  items: Item[];
 
-  displayedColumns: string[] = ['id', 'shopId', 'bookId', 'price', 'action'];
+  displayedColumns: string[] = ['id', 'shop_id', 'book_id', 'price', 'action'];
   registerForm: FormGroup;
   newItemForm: FormGroup;
   current: Item;
@@ -30,51 +26,94 @@ export class AdminItemsComponent implements OnInit {
   constructor(private modalService: NgbModal, private dataService: DataItemService) { }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource(this.items);
+    this.dataService.getItems().subscribe(
+      result => {
+        this.items = result.items;
+        this.dataSource = new MatTableDataSource(this.items);
+      }
+    );
 
     this.registerForm = new FormGroup({
       _id : new FormControl(['', Validators.required]),
-      shopId: new FormControl(['', Validators.required]),
-      bookId: new FormControl(['', Validators.required]),
+      shop_id: new FormControl(['', Validators.required]),
+      book_id: new FormControl(['', Validators.required]),
       price: new FormControl(['', Validators.required]),
     });
 
     this.newItemForm = new FormGroup({
-      shopId: new FormControl(['', Validators.required]),
-      bookId: new FormControl(['', Validators.required]),
+      shop_id: new FormControl(['', Validators.required]),
+      book_id: new FormControl(['', Validators.required]),
       price: new FormControl(['', Validators.required]),
     });
   }
 
   remove(id: any) {
-    this.items = this.items.filter(item => String(item._id) !== String(id));
-    this.dataSource = new MatTableDataSource(this.items);
+    this.dataService.deleteItem(id)
+      .subscribe(() => {
+          this.items.forEach((item, index) => {
+            if (item._id === id) {
+              this.items.splice(index, 1);
+            }
+          });
+
+          this.dataSource = new MatTableDataSource(this.items);
+        }
+      );
   }
 
   onEditItem() {
-    this.current.shopId = this.registerForm.get('shopId').value;
-    this.current.bookId = this.registerForm.get('bookId').value;
-    this.current.price = this.registerForm.get('price').value;
-    this.modalService.dismissAll();
+    const toUpdate = [];
+
+    if (this.current.shop_id !== this.registerForm.get('shop_id').value) {
+      this.current.shop_id = this.registerForm.get('shop_id').value;
+      toUpdate.push({propName: 'shop_id', value: this.registerForm.get('shop_id').value});
+    }
+
+    if (this.current.book_id !== this.registerForm.get('book_id').value) {
+      this.current.book_id = this.registerForm.get('book_id').value;
+      toUpdate.push({propName: 'book_id', value: this.registerForm.get('book_id').value});
+    }
+
+    if (this.current.price !== this.registerForm.get('price').value) {
+      this.current.price = this.registerForm.get('price').value;
+      toUpdate.push({propName: 'price', value: this.registerForm.get('price').value});
+    }
+
+    if (toUpdate.length === 0) {
+      this.modalService.dismissAll();
+      return;
+    }
+
+    this.dataService.updateItem(this.current._id, toUpdate)
+      .subscribe(res => {
+          this.dataSource = new MatTableDataSource(this.items);
+          this.modalService.dismissAll();
+        }
+      );
   }
 
   openEditItem(item: Item) {
     this.current = item;
-    this.registerForm.controls['shopId'].setValue(item.shopId);
-    this.registerForm.controls['bookId'].setValue(item.bookId);
+    this.registerForm.controls['shop_id'].setValue(item.shop_id);
+    this.registerForm.controls['book_id'].setValue(item.book_id);
     this.registerForm.controls['price'].setValue(item.price);
     this.openModal(this.editTemplate, 'modal-edit-item');
   }
 
   onNewItem() {
     const item = new Item();
-    item.shopId = this.newItemForm.get('shopId').value;
-    item.bookId = this.newItemForm.get('bookId').value;
+    item.shop_id = this.newItemForm.get('shop_id').value;
+    item.book_id = this.newItemForm.get('book_id').value;
     item.price = this.newItemForm.get('price').value;
-    item._id = String(Number(this.items[this.items.length - 1]._id) + 1);
 
-    this.items.push(item);
-    this.dataSource = new MatTableDataSource(this.items);
+    this.dataService. newItem(item)
+      .subscribe(res => {
+          this.items.push(res['createdItem']);
+          this.dataSource = new MatTableDataSource(this.items);
+        }, (err) => {
+          console.log(err);
+        }
+      );
     this.modalService.dismissAll();
   }
 
