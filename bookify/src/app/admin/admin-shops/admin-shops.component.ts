@@ -1,10 +1,8 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Shop} from '../../models/shop/shop';
-import {Achievement} from '../../models/achievement/achievements';
-import {DataAuthorService} from '../../models/author/data-author.service';
 import {DataShopService} from '../../models/shop/data-shop.service';
 
 @Component({
@@ -15,6 +13,7 @@ import {DataShopService} from '../../models/shop/data-shop.service';
 export class AdminShopsComponent implements OnInit {
 
   @ViewChild('editShop', {static: false}) editShopTemplate: ElementRef;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<Shop>;
   shops: Shop[];
@@ -22,7 +21,6 @@ export class AdminShopsComponent implements OnInit {
   displayedColumns: string[] = ['id', 'name', 'url', 'action'];
   registerForm: FormGroup;
   newShopForm: FormGroup;
-  myControl = new FormControl();
   currentShop: Shop;
 
   constructor(private modalService: NgbModal, private dataService: DataShopService) { }
@@ -32,6 +30,7 @@ export class AdminShopsComponent implements OnInit {
       result => {
         this.shops = result.shops;
         this.dataSource = new MatTableDataSource(this.shops);
+        this.dataSource.paginator = this.paginator;
       }
     );
 
@@ -54,7 +53,7 @@ export class AdminShopsComponent implements OnInit {
     this.dataService.newShop(shop)
       .subscribe(res => {
           this.shops.push(res['createdShop']);
-          this.dataSource = new MatTableDataSource(this.shops);
+          this.dataSource.data = this.shops;
         }, (err) => {
           console.log(err);
         }
@@ -92,7 +91,7 @@ export class AdminShopsComponent implements OnInit {
 
     this.dataService.updateShop(this.currentShop._id, toUpdate)
       .subscribe(res => {
-          this.dataSource = new MatTableDataSource(this.shops);
+          this.dataSource.data = this.shops;
           this.modalService.dismissAll();
         }
       );
@@ -107,7 +106,7 @@ export class AdminShopsComponent implements OnInit {
             }
           });
 
-          this.dataSource = new MatTableDataSource(this.shops);
+          this.dataSource.data = this.shops;
         }
       );
   }
