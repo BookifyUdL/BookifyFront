@@ -1,6 +1,6 @@
 <ng-template #newBook let-modalnew>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-new-book">Edit Book</h4>
+    <h4 class="modal-title" id="modal-new-book">New Book</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -48,7 +48,6 @@
           <input formControlName="publication_date" type="number" placeholder="Publication Date" aria-label="Name" matInput value="">
         </mat-form-field>
         <br>
-
       </div>
 
       <div class="form-group">
@@ -193,5 +192,6 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    <mat-paginator [pageSizeOptions]="[15, 30, 60]" showFirstLastButtons></mat-paginator>
   </div>
 </div>

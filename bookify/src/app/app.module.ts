@@ -15,7 +15,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {
   MatAutocompleteModule, MatListModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatDatepickerModule, MatNativeDateModule,
-  MatTableModule, MatCardModule, MatRadioModule, MatIconModule
+  MatTableModule, MatCardModule, MatRadioModule, MatIconModule, MatPaginatorModule
 } from '@angular/material';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AdminAchievementsComponent } from './admin/admin-achievements/admin-achievements.component';
@@ -63,7 +63,8 @@ import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
     MatCardModule,
     MatRadioModule,
     MatIconModule,
-    NgbModule
+    NgbModule,
+    MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]
