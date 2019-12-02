@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Comment } from '../../models/comment/comment';
@@ -13,16 +13,10 @@ import { DataCommentService } from '../../models/comments/data-comment.service';
 export class AdminCommentsComponent implements OnInit {
 
   @ViewChild('editComment', {static: false}) editTemplate: ElementRef;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<Comment>;
   comments: Comment[];
-  // comments: Comment[] = [
-  //   {_id : '1', commentType: 1, comment: 'Baffled', url: '', subReview: [], user: null, userLiked: []},
-  //   {_id : '2', commentType: 1, comment: 'Amazing', url: '', subReview: [], user: null, userLiked: []},
-  //   {_id : '3', commentType: 2, comment: 'Worst book that I\'ve ever read.', url: 'asd.com/image1.png', subReview: [], user: null,
-  //     userLiked: []},
-  //   {_id : '4', commentType: 3, comment: 'Uninteresting at its best', url: 'asd.com/gif1.gif', subReview: [], user: null, userLiked: []},
-  // ];
 
   displayedColumns: string[] = ['id', 'commentType', 'comment', 'url', 'subReview', 'user', 'userLiked', 'action'];
   registerForm: FormGroup;
@@ -35,6 +29,7 @@ export class AdminCommentsComponent implements OnInit {
       result => {
         this.comments = result.comments;
         this.dataSource = new MatTableDataSource(this.comments);
+        this.dataSource.paginator = this.paginator;
       }
     );
 
@@ -58,7 +53,7 @@ export class AdminCommentsComponent implements OnInit {
             }
           });
 
-          this.dataSource = new MatTableDataSource(this.comments);
+          this.dataSource.data = this.comments;
         }
       );
   }
@@ -115,7 +110,7 @@ export class AdminCommentsComponent implements OnInit {
 
     this.dataService.updateComment(this.current._id, toUpdate)
       .subscribe(res => {
-          this.dataSource = new MatTableDataSource(this.comments);
+          this.dataSource.data = this.comments;
           this.modalService.dismissAll();
         }
       );

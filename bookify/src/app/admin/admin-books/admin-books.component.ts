@@ -3,7 +3,9 @@ import { MatTableDataSource } from '@angular/material';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Book } from '../../models/book/book';
-import {DataBookService} from '../../models/book/data-book.service';
+import { DataBookService } from '../../models/book/data-book.service';
+import { MatPaginator } from '@angular/material/paginator';
+
 
 @Component({
   selector: 'app-admin-books',
@@ -13,6 +15,7 @@ import {DataBookService} from '../../models/book/data-book.service';
 export class AdminBooksComponent implements OnInit {
 
   @ViewChild('editBook', {static: false}) editTemplate: ElementRef;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<Book>;
   books: Book[];
@@ -29,6 +32,7 @@ export class AdminBooksComponent implements OnInit {
       result => {
         this.books = result.books;
         this.dataSource = new MatTableDataSource(this.books);
+        this.dataSource.paginator = this.paginator;
       }
     );
 
@@ -66,7 +70,7 @@ export class AdminBooksComponent implements OnInit {
             }
           });
 
-          this.dataSource = new MatTableDataSource(this.books);
+          this.dataSource.data = this.books;
         }
       );
   }
@@ -121,7 +125,7 @@ export class AdminBooksComponent implements OnInit {
 
     this.dataService.updateBook(this.current._id, toUpdate)
       .subscribe(res => {
-          this.dataSource = new MatTableDataSource(this.books);
+          this.dataSource.data = this.books;
           this.modalService.dismissAll();
         }
       );
@@ -160,7 +164,7 @@ export class AdminBooksComponent implements OnInit {
     this.dataService.newBook(book)
       .subscribe(res => {
           this.books.push(res['createdBook']);
-          this.dataSource = new MatTableDataSource(this.books);
+          this.dataSource.data = this.books;
         }, (err) => {
           console.log(err);
         }

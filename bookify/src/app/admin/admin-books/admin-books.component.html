@@ -1,6 +1,6 @@
 <ng-template #newBook let-modalnew>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-new-book">Edit Book</h4>
+    <h4 class="modal-title" id="modal-new-book">New Book</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -48,7 +48,6 @@
           <input formControlName="publication_date" type="number" placeholder="Publication Date" aria-label="Name" matInput value="">
         </mat-form-field>
         <br>
-
       </div>
 
       <div class="form-group">
@@ -67,7 +66,8 @@
   </div>
   <div class="modal-body">
     <form [formGroup]="registerForm" (ngSubmit)="onEditBook()">
-      <div class="form-group flex-column">
+      <div class="row">
+      <div class="form-group flex-column column">
 
         <mat-form-field class="example-full-width">
           <input type="text" placeholder="ID" aria-label="ID" matInput value="{{current._id}}" readonly disabled>
@@ -104,9 +104,12 @@
           <input formControlName="provider" type="number" placeholder="Provider" aria-label="Name" matInput value="{{current.provider}}">
         </mat-form-field>
         <br>
-
       </div>
+        <div class="column image-container">
+          <img class="mr-lg-5" alt="cover_image" src={{current.cover_image}} />
 
+        </div>
+    </div>
       <div class="form-group">
         <button [disabled]="loading" class="btn btn-outline-dark">Submit</button>
       </div>
@@ -189,5 +192,6 @@
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+    <mat-paginator [pageSizeOptions]="[15, 30, 60]" showFirstLastButtons></mat-paginator>
   </div>
 </div>

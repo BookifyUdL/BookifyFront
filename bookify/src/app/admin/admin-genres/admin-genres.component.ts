@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { Genre } from '../../models/genre/genre';
-import { MatTableDataSource } from '@angular/material';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {DataGenreService} from '../../models/genre/data-genre.service';
@@ -13,6 +13,7 @@ import {DataGenreService} from '../../models/genre/data-genre.service';
 export class AdminGenresComponent implements OnInit {
 
   @ViewChild('editGenre', {static: false}) editGenreTemplate: ElementRef;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<Genre>;
   genres: Genre[];
@@ -29,6 +30,7 @@ export class AdminGenresComponent implements OnInit {
       result => {
         this.genres = result.genres;
         this.dataSource = new MatTableDataSource(this.genres);
+        this.dataSource.paginator = this.paginator;
       }
     );
 
@@ -52,7 +54,7 @@ export class AdminGenresComponent implements OnInit {
             }
           });
 
-          this.dataSource = new MatTableDataSource(this.genres);
+          this.dataSource.data = this.genres;
         }
       );
   }
@@ -84,7 +86,7 @@ export class AdminGenresComponent implements OnInit {
 
     this.dataService.updateGenre(this.currentGenre._id, toUpdate)
       .subscribe(res => {
-          this.dataSource = new MatTableDataSource(this.genres);
+          this.dataSource.data = this.genres;
           this.modalService.dismissAll();
         }
       );
@@ -104,7 +106,7 @@ export class AdminGenresComponent implements OnInit {
     this.dataService.newGenre(genre)
       .subscribe(res => {
           this.genres.push(res['createdGenre']);
-          this.dataSource = new MatTableDataSource(this.genres);
+          this.dataSource.data = this.genres;
         }, (err) => {
           console.log(err);
         }

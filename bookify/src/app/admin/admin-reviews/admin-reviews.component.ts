@@ -1,5 +1,5 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Review} from '../../models/review/review';
@@ -14,6 +14,7 @@ import {DataReviewService} from '../../models/review/data-review.service';
 export class AdminReviewsComponent implements OnInit {
 
   @ViewChild('editReview', {static: false}) editTemplate: ElementRef;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<Review>;
   reviews: Review[];
@@ -29,6 +30,7 @@ export class AdminReviewsComponent implements OnInit {
       result => {
         this.reviews = result.reviews;
         this.dataSource = new MatTableDataSource(this.reviews);
+        this.dataSource.paginator = this.paginator;
       }
     );
 
@@ -49,7 +51,7 @@ export class AdminReviewsComponent implements OnInit {
             }
           });
 
-          this.dataSource = new MatTableDataSource(this.reviews);
+          this.dataSource.data = this.reviews;
         }
       );
   }
@@ -79,7 +81,7 @@ export class AdminReviewsComponent implements OnInit {
 
     this.dataService.updateReview(this.current._id, toUpdate)
       .subscribe(res => {
-          this.dataSource = new MatTableDataSource(this.reviews);
+          this.dataSource.data = this.reviews;
           this.modalService.dismissAll();
         }
       );
