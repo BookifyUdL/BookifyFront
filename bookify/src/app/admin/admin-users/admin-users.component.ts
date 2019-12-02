@@ -1,10 +1,9 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from '@angular/material';
-import {Book} from '../../models/book/book';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
-import {User} from '../../models/user/user';
-import {DataUserService} from '../../models/user/data-user.service';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { User } from '../../models/user/user';
+import { DataUserService } from '../../models/user/data-user.service';
 
 @Component({
   selector: 'app-admin-users',
@@ -13,7 +12,7 @@ import {DataUserService} from '../../models/user/data-user.service';
 })
 export class AdminUsersComponent implements OnInit {
 
-
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild('editUser', {static: false}) editTemplate: ElementRef;
 
   dataSource: MatTableDataSource<User>;
@@ -31,6 +30,7 @@ export class AdminUsersComponent implements OnInit {
       result => {
         this.users = result.users;
         this.dataSource = new MatTableDataSource(this.users);
+        this.dataSource.paginator = this.paginator;
       }
     );
 
@@ -72,7 +72,7 @@ export class AdminUsersComponent implements OnInit {
             }
           });
 
-          this.dataSource = new MatTableDataSource(this.users);
+          this.dataSource.data = this.users;
         }
       );
   }
@@ -137,7 +137,7 @@ export class AdminUsersComponent implements OnInit {
 
     this.dataService.updateUser(this.current._id, toUpdate)
       .subscribe(res => {
-          this.dataSource = new MatTableDataSource(this.users);
+          this.dataSource.data = this.users;
           this.modalService.dismissAll();
         }
       );
@@ -176,7 +176,7 @@ export class AdminUsersComponent implements OnInit {
     this.dataService.newUser(user)
       .subscribe(res => {
           this.users.push(res['createdUser']);
-          this.dataSource = new MatTableDataSource(this.users);
+          this.dataSource.data = this.users;
         }, (err) => {
           console.log(err);
         }
