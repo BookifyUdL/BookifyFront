@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Author } from '../../models/author/author';
@@ -13,6 +13,7 @@ import { DataAuthorService } from '../../models/author/data-author.service';
 export class AdminAuthorsComponent implements OnInit {
 
   @ViewChild('editAuthor', {static: false}) editTemplate: ElementRef;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<Author>;
   authors: Author[];
@@ -29,6 +30,7 @@ export class AdminAuthorsComponent implements OnInit {
       result => {
         this.authors = result.authors;
         this.dataSource = new MatTableDataSource(this.authors);
+        this.dataSource.paginator = this.paginator;
       }
     );
 
@@ -51,7 +53,7 @@ export class AdminAuthorsComponent implements OnInit {
             }
           });
 
-          this.dataSource = new MatTableDataSource(this.authors);
+          this.dataSource.data = this.authors;
         }
       );
   }
@@ -71,7 +73,7 @@ export class AdminAuthorsComponent implements OnInit {
 
     this.dataService.updateAuthor(this.current._id, toUpdate)
       .subscribe(res => {
-          this.dataSource = new MatTableDataSource(this.authors);
+          this.dataSource.data = this.authors;
           this.modalService.dismissAll();
         }
       );
@@ -91,7 +93,7 @@ export class AdminAuthorsComponent implements OnInit {
     this.dataService.newAuthor(author)
       .subscribe(res => {
           this.authors.push(res['createdAuthor']);
-          this.dataSource = new MatTableDataSource(this.authors);
+          this.dataSource.data = this.authors;
         }, (err) => {
           console.log(err);
         }
