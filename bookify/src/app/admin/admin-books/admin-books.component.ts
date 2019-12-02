@@ -5,7 +5,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Book } from '../../models/book/book';
 import { DataBookService } from '../../models/book/data-book.service';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @Component({

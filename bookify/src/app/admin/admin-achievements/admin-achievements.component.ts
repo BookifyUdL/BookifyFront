@@ -1,9 +1,10 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material';
-import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {Achievement} from '../../models/achievement/achievements';
 import {DataAchievementService} from '../../models/achievement/data-achievement.service';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-admin-achievements',
@@ -13,6 +14,7 @@ import {DataAchievementService} from '../../models/achievement/data-achievement.
 export class AdminAchievementsComponent implements OnInit {
 
   @ViewChild('editAchievement', {static: false}) editAchievementTemplate: ElementRef;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<Achievement>;
   achievements: Achievement[];
@@ -30,6 +32,8 @@ export class AdminAchievementsComponent implements OnInit {
       result => {
         this.achievements = result.achievements;
         this.dataSource = new MatTableDataSource(this.achievements);
+        this.dataSource.data = this.achievements;
+        this.dataSource.paginator = this.paginator;
       }
     );
 
@@ -56,7 +60,7 @@ export class AdminAchievementsComponent implements OnInit {
             }
           });
 
-          this.dataSource = new MatTableDataSource(this.achievements);
+          this.dataSource.data = this.achievements;
         }
       );
   }
@@ -86,7 +90,7 @@ export class AdminAchievementsComponent implements OnInit {
 
     this.dataService.updateAchievement(this.currentAchiev._id, toUpdate)
       .subscribe(res => {
-          this.dataSource = new MatTableDataSource(this.achievements);
+          this.dataSource.data = this.achievements;
           this.modalService.dismissAll();
         }
       );
@@ -110,7 +114,7 @@ export class AdminAchievementsComponent implements OnInit {
     this.dataService.newAchievement(achievement)
       .subscribe(res => {
           this.achievements.push(res['createdAchievement']);
-          this.dataSource = new MatTableDataSource(this.achievements);
+          this.dataSource.data = this.achievements;
         }, (err) => {
           console.log(err);
         }
