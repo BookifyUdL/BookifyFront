@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Item } from '../../models/item/item';
@@ -14,7 +14,8 @@ import {Shop} from '../../models/shop/shop';
 export class AdminItemsComponent implements OnInit {
 
   @ViewChild('editItem', {static: false}) editTemplate: ElementRef;
-
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  
   dataSource: MatTableDataSource<Item>;
   items: Item[];
 
@@ -30,6 +31,7 @@ export class AdminItemsComponent implements OnInit {
       result => {
         this.items = result.items;
         this.dataSource = new MatTableDataSource(this.items);
+        this.dataSource.paginator = this.paginator;
       }
     );
 
@@ -56,7 +58,7 @@ export class AdminItemsComponent implements OnInit {
             }
           });
 
-          this.dataSource = new MatTableDataSource(this.items);
+          this.dataSource.data = this.items;
         }
       );
   }
@@ -86,7 +88,7 @@ export class AdminItemsComponent implements OnInit {
 
     this.dataService.updateItem(this.current._id, toUpdate)
       .subscribe(res => {
-          this.dataSource = new MatTableDataSource(this.items);
+          this.dataSource.data = this.items;
           this.modalService.dismissAll();
         }
       );
@@ -109,7 +111,7 @@ export class AdminItemsComponent implements OnInit {
     this.dataService. newItem(item)
       .subscribe(res => {
           this.items.push(res['createdItem']);
-          this.dataSource = new MatTableDataSource(this.items);
+          this.dataSource.data = this.items;
         }, (err) => {
           console.log(err);
         }
