@@ -10,9 +10,11 @@ import { AdminCommentsComponent } from './admin/admin-comments/admin-comments.co
 import { AdminReviewsComponent } from './admin/admin-reviews/admin-reviews.component';
 import { AdminBooksComponent } from './admin/admin-books/admin-books.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
+import { HomeComponentComponent } from './home/home-component/home-component.component';
 
 
 const routes: Routes = [
+  { path: '', component: HomeComponentComponent },
   { path: 'admin', component: AdminMainComponent },
   { path: 'admin/genres', component: AdminGenresComponent },
   { path: 'admin/achievements', component: AdminAchievementsComponent },

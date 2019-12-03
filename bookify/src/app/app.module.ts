@@ -26,6 +26,8 @@ import { AdminCommentsComponent } from './admin/admin-comments/admin-comments.co
 import { AdminReviewsComponent } from './admin/admin-reviews/admin-reviews.component';
 import { AdminBooksComponent } from './admin/admin-books/admin-books.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
+import { HomeComponentComponent } from './home/home-component/home-component.component';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
 
 
 @NgModule({
@@ -41,7 +43,8 @@ import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
     AdminCommentsComponent,
     AdminReviewsComponent,
     AdminBooksComponent,
-    AdminUsersComponent
+    AdminUsersComponent,
+    HomeComponentComponent
   ],
   imports: [
     BrowserModule,
@@ -53,6 +56,7 @@ import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
     HttpClientModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    AngularFontAwesomeModule,
 
     MatListModule,
     MatFormFieldModule,
