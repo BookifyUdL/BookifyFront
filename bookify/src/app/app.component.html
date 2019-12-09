@@ -10,18 +10,21 @@
       <li>
         <a class="nav-link" href="#">Home</a>
       </li>
-      <li>
+      <li *ngIf="isLoggedIn" >
         <a class="nav-link" href="admin">Admin</a>
       </li>
     </ul>
+
+    <ul *ngIf="!isLoggedIn" class="navbar-nav ml-auto">
+      <li>
+        <a class="nav-link" routerLink="/login">Login</a>
+      </li>
+    </ul>
+    <ul *ngIf="isLoggedIn" class="navbar-nav ml-auto">
+      <li>
+        <a class="nav-link" (click)="logout()" routerLink="">Logout</a>
+      </li>
+    </ul>
   </nav>
-
-  <!--<header class="intro-header container-full">-->
-  <!--Intro Section-->
-  <!--<section class="view intro-2 rgba-gradient container-full">-->
-
-  <!--</section>-->
-
-  <!--</header>-->
   <router-outlet></router-outlet>
-  </div>
+</div>
