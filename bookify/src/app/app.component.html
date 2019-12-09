@@ -10,10 +10,21 @@
       <li>
         <a class="nav-link" href="#">Home</a>
       </li>
-      <li>
+      <li *ngIf="isLoggedIn" >
         <a class="nav-link" href="admin">Admin</a>
       </li>
     </ul>
+
+    <ul *ngIf="!isLoggedIn" class="navbar-nav ml-auto">
+      <li>
+        <a class="nav-link" routerLink="/login">Login</a>
+      </li>
+    </ul>
+    <ul *ngIf="isLoggedIn" class="navbar-nav ml-auto">
+      <li>
+        <a class="nav-link" (click)="logout()" routerLink="">Logout</a>
+      </li>
+    </ul>
   </nav>
-<router-outlet></router-outlet>
+  <router-outlet></router-outlet>
 </div>

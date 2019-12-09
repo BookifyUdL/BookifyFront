@@ -9,13 +9,14 @@ import { AdminGenresComponent } from './admin/admin-genres/admin-genres.componen
 import { AdminMainComponent } from './admin/admin-main/admin-main.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 
 import {
   MatAutocompleteModule, MatListModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatDatepickerModule, MatNativeDateModule,
-  MatTableModule, MatCardModule, MatRadioModule, MatIconModule, MatPaginatorModule
+  MatTableModule, MatCardModule, MatRadioModule, MatIconModule, MatPaginatorModule, MatToolbarModule,  MatDialogModule,
+  MatMenuModule,   MatProgressSpinnerModule,
 } from '@angular/material';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { AdminAchievementsComponent } from './admin/admin-achievements/admin-achievements.component';
@@ -26,6 +27,12 @@ import { AdminCommentsComponent } from './admin/admin-comments/admin-comments.co
 import { AdminReviewsComponent } from './admin/admin-reviews/admin-reviews.component';
 import { AdminBooksComponent } from './admin/admin-books/admin-books.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
+import { HomeComponentComponent } from './home/home-component/home-component.component';
+import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { LoginComponent } from './login/login/login.component';
+import {AuthService} from './auth/auth.service';
+import {CommonModule} from '@angular/common';
+import {AdminGuard} from './guards/admin/admin.guard';
 
 
 @NgModule({
@@ -41,10 +48,16 @@ import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
     AdminCommentsComponent,
     AdminReviewsComponent,
     AdminBooksComponent,
-    AdminUsersComponent
+    AdminUsersComponent,
+    HomeComponentComponent,
+    LoginComponent
   ],
   imports: [
-    BrowserModule,
+    CommonModule,
+    MatToolbarModule,
+    MatDialogModule,
+    MatMenuModule,
+    MatProgressSpinnerModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
@@ -53,6 +66,7 @@ import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
     HttpClientModule,
     MatNativeDateModule,
     ReactiveFormsModule,
+    AngularFontAwesomeModule,
 
     MatListModule,
     MatFormFieldModule,
@@ -66,7 +80,10 @@ import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
     NgbModule,
     MatPaginatorModule
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    AdminGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -79,4 +79,36 @@ body {
   background-color: grey;
 }
 
+.intro-header {
+  height: unset !important;
+}
+
+.intro-2 {
+  background: url("assets/library.jpg");
+  background-size: cover;
+}
+
+.main-page {
+  padding-top: 1em;
+}
+
+.top-nav-collapse {
+  background-color: #424f95 !important;
+  background: url("assets/library.jpg");
+}
+
+.halved {
+  display: block;
+  width: 50%;
+  height: auto;
+}
+h6 {
+  line-height: 1.7;
+}
+.rgba-gradient .full-bg-img {
+  //background: linear-gradient(45deg, rgba(42, 27, 161, 0.6), rgba(29, 210, 177, 0.6) 100%);
+  background: linear-gradient(to right, rgb(220, 220, 220, 0.8), rgb(169, 169, 169, 0.8) 100%);
+  background-size: cover;
+}
+
 @include angular-material-theme($dark-theme);

@@ -10,10 +10,15 @@ import { AdminCommentsComponent } from './admin/admin-comments/admin-comments.co
 import { AdminReviewsComponent } from './admin/admin-reviews/admin-reviews.component';
 import { AdminBooksComponent } from './admin/admin-books/admin-books.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
+import { HomeComponentComponent } from './home/home-component/home-component.component';
+import { LoginComponent } from './login/login/login.component';
+import {AdminGuard} from './guards/admin/admin.guard';
 
 
 const routes: Routes = [
-  { path: 'admin', component: AdminMainComponent },
+  { path: '', component: HomeComponentComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'admin', component: AdminMainComponent, canActivate: [AdminGuard] },
   { path: 'admin/genres', component: AdminGenresComponent },
   { path: 'admin/achievements', component: AdminAchievementsComponent },
   { path: 'admin/shops', component: AdminShopsComponent },
