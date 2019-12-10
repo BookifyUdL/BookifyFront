@@ -34,6 +34,7 @@ import { AuthService } from './auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { AdminGuard } from './guards/admin/admin.guard';
 import { ChartsModule } from 'ng2-charts';
+import { AdminStatisticsComponent } from './admin/admin-statistics/admin-statistics.component';
 
 
 
@@ -52,7 +53,8 @@ import { ChartsModule } from 'ng2-charts';
     AdminBooksComponent,
     AdminUsersComponent,
     HomeComponentComponent,
-    LoginComponent
+    LoginComponent,
+    AdminStatisticsComponent
   ],
   imports: [
     CommonModule,
