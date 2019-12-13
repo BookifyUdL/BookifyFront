@@ -12,7 +12,8 @@ import { AdminBooksComponent } from './admin/admin-books/admin-books.component';
 import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 import { HomeComponentComponent } from './home/home-component/home-component.component';
 import { LoginComponent } from './login/login/login.component';
-import {AdminGuard} from './guards/admin/admin.guard';
+import { AdminGuard } from './guards/admin/admin.guard';
+import { AdminStatisticsComponent } from './admin/admin-statistics/admin-statistics.component';
 
 
 const routes: Routes = [
@@ -28,6 +29,7 @@ const routes: Routes = [
   { path: 'admin/reviews', component: AdminReviewsComponent },
   { path: 'admin/books', component: AdminBooksComponent },
   { path: 'admin/users', component: AdminUsersComponent },
+  { path: 'admin/statistics', component: AdminStatisticsComponent },
 ];
 
 @NgModule({
