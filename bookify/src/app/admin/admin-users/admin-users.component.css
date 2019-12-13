@@ -1,0 +1,6 @@
+.chartjs-render-monitor {
+  animation: chartjs-render-animation 0.001s;
+  width: 50%;
+  color: black;
+  border-color: black;
+}
