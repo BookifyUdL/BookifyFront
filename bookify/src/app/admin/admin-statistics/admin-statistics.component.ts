@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { DataStatisticsService } from '../../models/statistics/data-statistics.service';
+import {MatTableDataSource} from '@angular/material';
+import {formatDate} from '@angular/common';
 
 @Component({
   selector: 'app-admin-statistics',
@@ -7,7 +11,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminStatisticsComponent implements OnInit{
 
-  constructor() { }
+  constructor(private modalService: NgbModal, private dataService: DataStatisticsService) { }
 
   // clicks
   lineChartColors = [
@@ -57,7 +61,7 @@ export class AdminStatisticsComponent implements OnInit{
     { data: [], label: 'Clicks' },
   ];
 
-  chartLabels = ['10/11', '11/11', '12/11', '13/11', '14/11'];
+  chartLabels = [];
 
   // Premium
   PremiumLineChartColors = [
@@ -107,23 +111,34 @@ export class AdminStatisticsComponent implements OnInit{
     { data: [], label: 'Premium users' },
   ];
 
-  PremiumChartLabels = ['10/11', '11/11', '12/11', '13/11', '14/11'];
+  PremiumChartLabels = [];
 
   onChartClick(event) {
     console.log(event);
   }
 
   ngOnInit(): void {
-      this.chartData[0].data.push(3);
-      this.chartData[0].data.push(10);
-      this.chartData[0].data.push(15);
-      this.chartData[0].data.push(17);
-      this.chartData[0].data.push(18);
+    const format = 'dd/MM/yyyy';
+    const locale = 'en-ES';
 
-      this.PremiumChartData[0].data.push(3);
-      this.PremiumChartData[0].data.push(10);
-      this.PremiumChartData[0].data.push(15);
-      this.PremiumChartData[0].data.push(17);
-      this.PremiumChartData[0].data.push(18);
+    this.dataService.getStatisticByType(1).subscribe(
+      result => {
+        result.statistics.forEach(elem => {
+            const formattedDate = formatDate(elem.time, format, locale);
+            this.chartLabels.push(formattedDate);
+            this.chartData[0].data.push(elem.quantity);
+        });
+      }
+    );
+
+    this.dataService.getStatisticByType(2).subscribe(
+      result => {
+        result.statistics.forEach(elem => {
+          const formattedDate = formatDate(elem.time, format, locale);
+          this.PremiumChartLabels.push(formattedDate);
+          this.PremiumChartData[0].data.push(elem.quantity);
+        });
+      }
+    );
   }
 }
