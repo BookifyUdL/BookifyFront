@@ -30,9 +30,12 @@ import { AdminUsersComponent } from './admin/admin-users/admin-users.component';
 import { HomeComponentComponent } from './home/home-component/home-component.component';
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
 import { LoginComponent } from './login/login/login.component';
-import {AuthService} from './auth/auth.service';
-import {CommonModule} from '@angular/common';
-import {AdminGuard} from './guards/admin/admin.guard';
+import { AuthService } from './auth/auth.service';
+import { CommonModule } from '@angular/common';
+import { AdminGuard } from './guards/admin/admin.guard';
+import { ChartsModule } from 'ng2-charts';
+import { AdminStatisticsComponent } from './admin/admin-statistics/admin-statistics.component';
+
 
 
 @NgModule({
@@ -50,7 +53,8 @@ import {AdminGuard} from './guards/admin/admin.guard';
     AdminBooksComponent,
     AdminUsersComponent,
     HomeComponentComponent,
-    LoginComponent
+    LoginComponent,
+    AdminStatisticsComponent
   ],
   imports: [
     CommonModule,
@@ -67,6 +71,7 @@ import {AdminGuard} from './guards/admin/admin.guard';
     MatNativeDateModule,
     ReactiveFormsModule,
     AngularFontAwesomeModule,
+    ChartsModule,
 
     MatListModule,
     MatFormFieldModule,

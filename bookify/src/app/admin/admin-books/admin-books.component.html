@@ -79,7 +79,7 @@
         <br>
 
         <mat-form-field class="example-full-width">
-          <input formControlName="author" type="text" placeholder="Author" aria-label="Name" matInput value="{{current.author}}">
+          <input formControlName="author" type="text" placeholder="Author" aria-label="Name" matInput value="{{current.author.name}}">
         </mat-form-field>
         <br>
 
@@ -89,7 +89,7 @@
         <br>
 
         <mat-form-field class="example-full-width">
-          <input formControlName="genre" type="text" placeholder="Genre" aria-label="Name" matInput value="{{current.genre}}">
+          <input formControlName="genre" type="text" placeholder="Genre" aria-label="Name" matInput value="{{current.genre[0}.name}">
         </mat-form-field>
         <br>
         <mat-form-field class="example-full-width">
@@ -106,8 +106,41 @@
         <br>
       </div>
         <div class="column image-container">
-          <img class="mr-lg-5" alt="cover_image" src={{current.cover_image}} />
 
+          <img alt="cover_image" src={{current.cover_image}} />
+          <div class="mt-2">
+            <img class="vergaso" src='../../../assets/star.png'/>
+            <span class="whitey ml-2">{{current.rating}}</span>
+          </div>
+          <div class="containerwey">
+
+            <img class="verga" src='../../../assets/angry.png'/>
+            <img class="verga" src='../../../assets/scared.png'/>
+            <img class="verga" src='../../../assets/sad.png'/>
+            <img class="verga" src='../../../assets/confused.png'/>
+          </div>
+
+          <div class="containerwey">
+            <span>{{current.feelings.angry}}</span>
+            <span>{{current.feelings.scared}}</span>
+            <span>{{current.feelings.sad}}</span>
+            <span>{{current.feelings.confused}}</span>
+          </div>
+
+          <div class="containerwey">
+
+            <img class="verga" src='../../../assets/bored.png'/>
+            <img class="verga" src='../../../assets/surprised.png'/>
+            <img class="verga" src='../../../assets/happy.png'/>
+            <img class="verga" src='../../../assets/excited.png'/>
+          </div>
+
+          <div class="containerwey">
+            <span>{{current.feelings.bored}}</span>
+            <span>{{current.feelings.shocked}}</span>
+            <span>{{current.feelings.happy}}</span>
+            <span>4{{current.feelings.excited}}</span>
+          </div>
         </div>
     </div>
       <div class="form-group">
@@ -148,7 +181,7 @@
       <ng-container matColumnDef="author">
         <th mat-header-cell *matHeaderCellDef> Author </th>
         <td mat-cell *matCellDef="let element">
-          <a> {{element.author}} </a>
+          <a> {{element.author.name}} </a>
         </td>
       </ng-container>
 
@@ -162,7 +195,7 @@
       <ng-container matColumnDef="genre">
         <th mat-header-cell *matHeaderCellDef> Genre </th>
         <td mat-cell *matCellDef="let element">
-          <a> {{element.genre}} </a>
+          <a> {{element.genre[0].nameh}} </a>
         </td>
       </ng-container>
 
